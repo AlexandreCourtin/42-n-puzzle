@@ -2,6 +2,7 @@ import sys
 import argparse
 
 class bcolors:
+	RED = '\x1b[1m\x1b[31m'
 	YELLOW = '\x1b[1m\x1b[33m'
 	GREEN = '\x1b[1m\x1b[32m'
 	ENDC = '\x1b[0m'
@@ -60,3 +61,19 @@ if __name__ == '__main__':
 	print('matrix is ')
 	for array in puzzleMatrix:
 		print(bcolors.GREEN + str(array) + bcolors.ENDC)
+
+	print(bcolors.YELLOW + '\n===== check if only one zero in matrix =====' + bcolors.ENDC)
+	zeroNumber = 0
+	for array in puzzleMatrix:
+		for number in array:
+			if int(number) == 0:
+				zeroNumber += 1
+
+	if zeroNumber > 1:
+		print(bcolors.RED + 'too much zeros' + bcolors.ENDC)
+		sys.exit(1)
+	elif zeroNumber < 1:
+		print(bcolors.RED + 'no zeros' + bcolors.ENDC)
+		sys.exit(1)
+	else:
+		print(bcolors.GREEN + 'all good' + bcolors.ENDC)
