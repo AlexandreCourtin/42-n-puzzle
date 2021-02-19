@@ -13,7 +13,7 @@ if __name__ == '__main__':
 		print('file error')
 		sys.exit(1)
 
-	print('===== reading file =====')
+	print('\x1b[1m\x1b[33m===== reading file =====\x1b[32m')
 
 	lineCount = 0
 	rowCount = 0
@@ -49,6 +49,8 @@ if __name__ == '__main__':
 
 		lineCount += 1
 
-	print('===== file summary =====')
+	print('\x1b[33m===== file summary =====\x1b[32m')
 	print('length is {}'.format(length))
-	print('matrix is {}'.format(puzzleMatrix))
+	print('matrix is ')
+	for array in puzzleMatrix:
+		print(array)
