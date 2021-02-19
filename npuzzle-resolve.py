@@ -108,6 +108,7 @@ if __name__ == '__main__':
 
 		x += directionX
 		y += directionY
+
 	print('desired matrix is:')
 	for array in desiredMatrix:
 		print(bcolors.GREEN + str(array) + bcolors.ENDC)
@@ -115,6 +116,8 @@ if __name__ == '__main__':
 	print(bcolors.YELLOW + '\n===== resolving n-puzzle with '
 		+ bcolors.GREEN + args.function + bcolors.YELLOW + ' heuristic function =====' + bcolors.ENDC)
 
+	attemptNumber = 0
+	print('attempt number: ' + bcolors.GREEN + str(attemptNumber) + bcolors.ENDC)
 	print('matrix is:')
 	for array in puzzleMatrix:
 		print(bcolors.GREEN + str(array) + bcolors.ENDC)
