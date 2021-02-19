@@ -7,6 +7,63 @@ class bcolors:
 	GREEN = '\x1b[1m\x1b[32m'
 	ENDC = '\x1b[0m'
 
+def calculateScore(paramCalcMatrix):
+	distanceMatrix = [ [ 0 for i in range(length) ] for j in range(length) ]
+	heuristicValue = 0
+	i = 0
+	while i < length:
+		j = 0
+		while j < length:
+			puzzleNumber = paramCalcMatrix[i][j]
+
+			if puzzleNumber != 0:
+				ii = 0
+				while ii < length:
+					jj = 0
+					while jj < length:
+						desiredNumber = desiredMatrix[ii][jj]
+						if desiredNumber == puzzleNumber:
+							distanceMatrix[i][j] = (max([ii, i]) - min([ii, i])) + (max([jj, j]) - min([jj, j]))
+							heuristicValue += distanceMatrix[i][j]
+						jj += 1
+					ii += 1
+
+			j += 1
+		i += 1
+
+	print('matrix is:')
+	for array in paramCalcMatrix:
+		print(bcolors.GREEN + str(array) + bcolors.ENDC)
+
+	print('distance matrix is:')
+	for array in distanceMatrix:
+		print(bcolors.GREEN + str(array) + bcolors.ENDC)
+
+	print('attemptNumber ' + bcolors.YELLOW + str(attemptNumber) + bcolors.ENDC
+		+ ' + heuristicValue ' + bcolors.YELLOW + str(heuristicValue) + bcolors.ENDC
+		+ ' = score ' + bcolors.GREEN + str(attemptNumber + heuristicValue) + bcolors.ENDC)
+
+def changeTile(paramMatrix, paramX, paramY):
+	copiedMatrix = [ [ 0 for i in range(length) ] for j in range(length) ]
+	i = 0
+	while i < length:
+		copiedMatrix[i] = paramMatrix[i].copy()
+		i += 1
+
+	done = False
+	i = 0
+	while i < length and done == False:
+		j = 0
+		while j < length and done == False:
+			if j + paramX < length and i + paramY < length and j + paramX >= 0 and i + paramY >= 0 and copiedMatrix[i][j] == 0:
+				copiedMatrix[i][j] = copiedMatrix[i + paramY][j + paramX]
+				copiedMatrix[i + paramY][j + paramX] = 0
+				done = True
+			j += 1
+		i += 1
+
+	return copiedMatrix
+
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
 
@@ -28,7 +85,6 @@ if __name__ == '__main__':
 	hasLength = False
 	puzzleMatrix = []
 	desiredMatrix = []
-	distanceMatrix = []
 
 	while True:
 		print('line {}:'.format(lineCount))
@@ -42,7 +98,6 @@ if __name__ == '__main__':
 					hasLength = True
 					puzzleMatrix = [ [ 0 for i in range(length) ] for j in range(length) ]
 					desiredMatrix = [ [ 0 for i in range(length) ] for j in range(length) ]
-					distanceMatrix = [ [ 0 for i in range(length) ] for j in range(length) ]
 				else:
 					if rowCount < length and columnCount < length:
 						puzzleMatrix[rowCount][columnCount] = int(char)
@@ -119,36 +174,16 @@ if __name__ == '__main__':
 	attemptNumber = 0
 	print('attempt number: ' + bcolors.GREEN + str(attemptNumber) + bcolors.ENDC)
 
-	heuristicValue = 0
-	i = 0
-	while i < length:
-		j = 0
-		while j < length:
-			puzzleNumber = puzzleMatrix[i][j]
+	calculateScore(puzzleMatrix)
 
-			if puzzleNumber != 0:
-				ii = 0
-				while ii < length:
-					jj = 0
-					while jj < length:
-						desiredNumber = desiredMatrix[ii][jj]
-						if desiredNumber == puzzleNumber:
-							distanceMatrix[i][j] = (max([ii, i]) - min([ii, i])) + (max([jj, j]) - min([jj, j]))
-							heuristicValue += distanceMatrix[i][j]
-						jj += 1
-					ii += 1
+	newMatrix = changeTile(puzzleMatrix, 1, 0)
+	calculateScore(newMatrix)
 
-			j += 1
-		i += 1
+	newMatrix = changeTile(puzzleMatrix, -1, 0)
+	calculateScore(newMatrix)
 
-	print('matrix is:')
-	for array in puzzleMatrix:
-		print(bcolors.GREEN + str(array) + bcolors.ENDC)
+	newMatrix = changeTile(puzzleMatrix, 0, 1)
+	calculateScore(newMatrix)
 
-	print('distance matrix is:')
-	for array in distanceMatrix:
-		print(bcolors.GREEN + str(array) + bcolors.ENDC)
-
-	print('attemptNumber ' + bcolors.YELLOW + str(attemptNumber) + bcolors.ENDC
-		+ ' + heuristicValue ' + bcolors.YELLOW + str(heuristicValue) + bcolors.ENDC
-		+ ' = score ' + bcolors.GREEN + str(attemptNumber + heuristicValue) + bcolors.ENDC)
+	newMatrix = changeTile(puzzleMatrix, 0, -1)
+	calculateScore(newMatrix)
