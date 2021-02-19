@@ -15,11 +15,15 @@ if __name__ == '__main__':
 
 	print('===== reading file =====')
 
-	count = 0
+	lineCount = 0
+	rowCount = 0
+	columnCount = 0
 	length = 0
 	hasLength = False
+	puzzleMatrix = []
+
 	while True:
-		print('line {}:'.format(count))
+		print('line {}:'.format(lineCount))
 		line = args.file.readline().split()
 
 		for char in line:
@@ -28,6 +32,14 @@ if __name__ == '__main__':
 				if not hasLength:
 					length = int(char)
 					hasLength = True
+					puzzleMatrix = [ [ 0 for i in range(length) ] for j in range(length) ]
+				else:
+					if rowCount < length and columnCount < length:
+						puzzleMatrix[rowCount][columnCount] = char
+						columnCount += 1
+						if columnCount >= length:
+							columnCount = 0
+							rowCount += 1
 			else:
 				break
 		print('')
@@ -35,7 +47,8 @@ if __name__ == '__main__':
 		if not line:
 			break
 
-		count += 1
+		lineCount += 1
 
 	print('===== file summary =====')
 	print('length is {}'.format(length))
+	print('matrix is {}'.format(puzzleMatrix))
