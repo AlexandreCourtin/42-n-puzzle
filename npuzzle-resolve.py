@@ -45,7 +45,7 @@ if __name__ == '__main__':
 					distanceMatrix = [ [ 0 for i in range(length) ] for j in range(length) ]
 				else:
 					if rowCount < length and columnCount < length:
-						puzzleMatrix[rowCount][columnCount] = char
+						puzzleMatrix[rowCount][columnCount] = int(char)
 						columnCount += 1
 						if columnCount >= length:
 							columnCount = 0
@@ -70,7 +70,7 @@ if __name__ == '__main__':
 	zeroNumber = 0
 	for array in puzzleMatrix:
 		for number in array:
-			if int(number) == 0:
+			if number == 0:
 				zeroNumber += 1
 
 	if zeroNumber > 1:
@@ -118,6 +118,29 @@ if __name__ == '__main__':
 
 	attemptNumber = 0
 	print('attempt number: ' + bcolors.GREEN + str(attemptNumber) + bcolors.ENDC)
+
+	heuristicValue = 0
+	i = 0
+	while i < length:
+		j = 0
+		while j < length:
+			puzzleNumber = puzzleMatrix[i][j]
+
+			if puzzleNumber != 0:
+				ii = 0
+				while ii < length:
+					jj = 0
+					while jj < length:
+						desiredNumber = desiredMatrix[ii][jj]
+						if desiredNumber == puzzleNumber:
+							distanceMatrix[i][j] = (max([ii, i]) - min([ii, i])) + (max([jj, j]) - min([jj, j]))
+							heuristicValue += distanceMatrix[i][j]
+						jj += 1
+					ii += 1
+
+			j += 1
+		i += 1
+
 	print('matrix is:')
 	for array in puzzleMatrix:
 		print(bcolors.GREEN + str(array) + bcolors.ENDC)
@@ -125,3 +148,7 @@ if __name__ == '__main__':
 	print('distance matrix is:')
 	for array in distanceMatrix:
 		print(bcolors.GREEN + str(array) + bcolors.ENDC)
+
+	print('attemptNumber ' + bcolors.YELLOW + str(attemptNumber) + bcolors.ENDC
+		+ ' + heuristicValue ' + bcolors.YELLOW + str(heuristicValue) + bcolors.ENDC
+		+ ' = score ' + bcolors.GREEN + str(attemptNumber + heuristicValue) + bcolors.ENDC)
