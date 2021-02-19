@@ -1,6 +1,11 @@
 import sys
 import argparse
 
+class bcolors:
+	YELLOW = '\x1b[1m\x1b[33m'
+	GREEN = '\x1b[1m\x1b[32m'
+	ENDC = '\x1b[0m'
+
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
 
@@ -13,7 +18,7 @@ if __name__ == '__main__':
 		print('file error')
 		sys.exit(1)
 
-	print('\x1b[1m\x1b[33m===== reading file =====\x1b[32m')
+	print(bcolors.YELLOW + '===== reading file =====' + bcolors.ENDC)
 
 	lineCount = 0
 	rowCount = 0
@@ -49,8 +54,9 @@ if __name__ == '__main__':
 
 		lineCount += 1
 
-	print('\x1b[33m===== file summary =====\x1b[32m')
-	print('length is {}'.format(length))
+	print(bcolors.YELLOW + '===== file summary =====' + bcolors.ENDC)
+	print('heuristic function is {}'.format(bcolors.GREEN + args.function + bcolors.ENDC))
+	print('length is {}'.format(bcolors.GREEN + str(length) + bcolors.ENDC))
 	print('matrix is ')
 	for array in puzzleMatrix:
-		print(array)
+		print(bcolors.GREEN + str(array) + bcolors.ENDC)
