@@ -1,13 +1,17 @@
 import sys
 import argparse
 
+# PUT SCORES IN A LIST THEN SORT THIS LIST
+# PUT ALREADY CHECKED BOARD AND SCORES IN A SECOND LIST
+# KEEP A RECORD OF THE MATRIX YOU CAME FROM SO YOU CAN RETRACE EVERYTHING TO THE BEGINING
+
 class bcolors:
 	RED = '\x1b[1m\x1b[31m'
 	YELLOW = '\x1b[1m\x1b[33m'
 	GREEN = '\x1b[1m\x1b[32m'
 	ENDC = '\x1b[0m'
 
-def calculateScore(paramCalcMatrix):
+def calculateManhattanScore(paramCalcMatrix):
 	distanceMatrix = [ [ 0 for i in range(length) ] for j in range(length) ]
 	heuristicValue = 0
 	i = 0
@@ -35,9 +39,9 @@ def calculateScore(paramCalcMatrix):
 	for array in paramCalcMatrix:
 		print(bcolors.GREEN + str(array) + bcolors.ENDC)
 
-	print('distance matrix is:')
-	for array in distanceMatrix:
-		print(bcolors.GREEN + str(array) + bcolors.ENDC)
+	# print('distance matrix is:')
+	# for array in distanceMatrix:
+	# 	print(bcolors.GREEN + str(array) + bcolors.ENDC)
 
 	print('attemptNumber ' + bcolors.YELLOW + str(attemptNumber) + bcolors.ENDC
 		+ ' + heuristicValue ' + bcolors.YELLOW + str(heuristicValue) + bcolors.ENDC
@@ -174,16 +178,16 @@ if __name__ == '__main__':
 	attemptNumber = 0
 	print('attempt number: ' + bcolors.GREEN + str(attemptNumber) + bcolors.ENDC)
 
-	calculateScore(puzzleMatrix)
+	calculateManhattanScore(puzzleMatrix)
 
 	newMatrix = changeTile(puzzleMatrix, 1, 0)
-	calculateScore(newMatrix)
+	calculateManhattanScore(newMatrix)
 
 	newMatrix = changeTile(puzzleMatrix, -1, 0)
-	calculateScore(newMatrix)
+	calculateManhattanScore(newMatrix)
 
 	newMatrix = changeTile(puzzleMatrix, 0, 1)
-	calculateScore(newMatrix)
+	calculateManhattanScore(newMatrix)
 
 	newMatrix = changeTile(puzzleMatrix, 0, -1)
-	calculateScore(newMatrix)
+	calculateManhattanScore(newMatrix)
