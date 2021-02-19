@@ -1,3 +1,4 @@
+import sys
 import argparse
 
 if __name__ == '__main__':
@@ -8,16 +9,33 @@ if __name__ == '__main__':
 
 	args = parser.parse_args()
 
-	if args.file:
-		print('heuristic function:')
-		print(args.function)
+	if not args.file:
+		print('file error')
+		sys.exit(1)
 
-		count = 0
-		while True:
-			line = args.file.readline()
+	print('===== reading file =====')
 
-			if not line:
+	count = 0
+	length = 0
+	hasLength = False
+	while True:
+		print('line {}:'.format(count))
+		line = args.file.readline().split()
+
+		for char in line:
+			if char.isnumeric():
+				print(char, end = '|')
+				if not hasLength:
+					length = int(char)
+					hasLength = True
+			else:
 				break
+		print('')
 
-			print('line {} : {}'.format(count, line))
-			count += 1
+		if not line:
+			break
+
+		count += 1
+
+	print('===== file summary =====')
+	print('length is {}'.format(length))
