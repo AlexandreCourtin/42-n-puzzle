@@ -9,7 +9,15 @@ if __name__ == '__main__':
 	args = parser.parse_args()
 
 	if args.file:
-		print('file to read:')
-		print(args.file.read())
 		print('heuristic function:')
 		print(args.function)
+
+		count = 0
+		while True:
+			line = args.file.readline()
+
+			if not line:
+				break
+
+			print('line {} : {}'.format(count, line))
+			count += 1
