@@ -27,6 +27,8 @@ if __name__ == '__main__':
 	length = 0
 	hasLength = False
 	puzzleMatrix = []
+	desiredMatrix = []
+	distanceMatrix = []
 
 	while True:
 		print('line {}:'.format(lineCount))
@@ -39,9 +41,12 @@ if __name__ == '__main__':
 					length = int(char)
 					hasLength = True
 					puzzleMatrix = [ [ 0 for i in range(length) ] for j in range(length) ]
+					desiredMatrix = [ [ 0 for i in range(length) ] for j in range(length) ]
+					distanceMatrix = [ [ 0 for i in range(length) ] for j in range(length) ]
 				else:
 					if rowCount < length and columnCount < length:
 						puzzleMatrix[rowCount][columnCount] = char
+						desiredMatrix[rowCount][columnCount] = columnCount + 1 + (rowCount * length)
 						columnCount += 1
 						if columnCount >= length:
 							columnCount = 0
@@ -54,12 +59,16 @@ if __name__ == '__main__':
 			break
 
 		lineCount += 1
+	desiredMatrix[length - 1][length - 1] = 0
 
 	print(bcolors.YELLOW + '===== file summary =====' + bcolors.ENDC)
 	print('heuristic function is {}'.format(bcolors.GREEN + args.function + bcolors.ENDC))
 	print('length is {}'.format(bcolors.GREEN + str(length) + bcolors.ENDC))
-	print('matrix is ')
+	print('matrix is:')
 	for array in puzzleMatrix:
+		print(bcolors.GREEN + str(array) + bcolors.ENDC)
+	print('desired matrix is:')
+	for array in desiredMatrix:
 		print(bcolors.GREEN + str(array) + bcolors.ENDC)
 
 	print(bcolors.YELLOW + '\n===== check if only one zero in matrix =====' + bcolors.ENDC)
@@ -77,3 +86,14 @@ if __name__ == '__main__':
 		sys.exit(1)
 	else:
 		print(bcolors.GREEN + 'all good' + bcolors.ENDC)
+
+	print(bcolors.YELLOW + '\n===== resolving n-puzzle with '
+		+ bcolors.GREEN + args.function + bcolors.YELLOW + ' heuristic function =====' + bcolors.ENDC)
+
+	print('matrix is:')
+	for array in puzzleMatrix:
+		print(bcolors.GREEN + str(array) + bcolors.ENDC)
+
+	print('distance matrix is:')
+	for array in distanceMatrix:
+		print(bcolors.GREEN + str(array) + bcolors.ENDC)
