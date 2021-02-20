@@ -7,6 +7,9 @@ from puzzleMatrix import *
 # PUT ALREADY CHECKED BOARD AND SCORES IN A SECOND LIST
 # KEEP A RECORD OF THE MATRIX YOU CAME FROM SO YOU CAN RETRACE EVERYTHING TO THE BEGINING
 
+def getHeur(elem):
+	return elem.heuristicValue
+
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
 
@@ -115,6 +118,8 @@ if __name__ == '__main__':
 		+ Bcolors.GREEN + args.function + Bcolors.YELLOW + ' heuristic function =====' + Bcolors.ENDC)
 
 	attemptNumber = 0
+	alreadyCheckedList = []
+	toCheckList = []
 	print('attempt number: ' + Bcolors.GREEN + str(attemptNumber) + Bcolors.ENDC)
 
 	firstMatrix = PuzzleMatrix(length, puzzleMatrix, desiredMatrix)
@@ -133,10 +138,8 @@ if __name__ == '__main__':
 	fourthMatrix.changeTile(0, -1)
 	fourthMatrix.calculateManhattanScore(attemptNumber)
 
-	alreadyCheckedList = []
 	alreadyCheckedList.append(puzzleMatrix)
 
-	toCheckList = []
 	if firstMatrix.currentMatrix != None:
 		toCheckList.append(firstMatrix)
 	if secondMatrix.currentMatrix != None:
@@ -145,3 +148,16 @@ if __name__ == '__main__':
 		toCheckList.append(thirdMatrix)
 	if fourthMatrix.currentMatrix != None:
 		toCheckList.append(fourthMatrix)
+
+	print('alreadyCheckedList')
+	for cm in alreadyCheckedList:
+		print(Bcolors.GREEN + str(cm) + Bcolors.ENDC)
+
+	print('toCheckList')
+	for cm in toCheckList:
+		print(Bcolors.GREEN + str(cm.heuristicValue) + Bcolors.ENDC)
+
+	toCheckList.sort(key=getHeur)
+	print('sorted toCheckList')
+	for cm in toCheckList:
+		print(Bcolors.GREEN + str(cm.heuristicValue) + Bcolors.ENDC)
