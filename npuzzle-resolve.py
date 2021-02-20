@@ -117,9 +117,6 @@ if __name__ == '__main__':
 	attemptNumber = 0
 	print('attempt number: ' + Bcolors.GREEN + str(attemptNumber) + Bcolors.ENDC)
 
-	firstMatrix = PuzzleMatrix(length, puzzleMatrix, desiredMatrix)
-	firstMatrix.calculateManhattanScore(attemptNumber)
-
 	secondMatrix = PuzzleMatrix(length, puzzleMatrix, desiredMatrix)
 	secondMatrix.changeTile(1, 0)
 	secondMatrix.calculateManhattanScore(attemptNumber)

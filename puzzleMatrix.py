@@ -1,12 +1,6 @@
 from bcolors import *
 
 class PuzzleMatrix():
-	def calculateId(self):
-		self.matrixId = ''
-		for row in self.currentMatrix:
-			for char in row:
-				self.matrixId += str(char)
-
 	def changeTile(self, paramX, paramY):
 		done = False
 		i = 0
@@ -19,9 +13,6 @@ class PuzzleMatrix():
 					done = True
 				j += 1
 			i += 1
-
-		self.precedentId = self.matrixId
-		self.calculateId()
 
 	def calculateManhattanScore(self, attemptNumber):
 		distanceMatrix = [ [ 0 for i in range(self.length) ] for j in range(self.length) ]
@@ -55,8 +46,9 @@ class PuzzleMatrix():
 		for array in distanceMatrix:
 			print(Bcolors.GREEN + str(array) + Bcolors.ENDC)
 
-		print('matrix id is: ' + Bcolors.GREEN + str(self.matrixId) + Bcolors.ENDC)
-		print('precendent id is: ' + Bcolors.GREEN + str(self.precedentId) + Bcolors.ENDC)
+		print('precedent matrix is:')
+		for array in self.precedentMatrix:
+			print(Bcolors.GREEN + str(array) + Bcolors.ENDC)
 
 		print('attemptNumber ' + Bcolors.YELLOW + str(attemptNumber) + Bcolors.ENDC
 			+ ' + heuristicValue ' + Bcolors.YELLOW + str(heuristicValue) + Bcolors.ENDC
@@ -66,12 +58,11 @@ class PuzzleMatrix():
 		self.length = length
 		self.currentMatrix = [ [ 0 for i in range(self.length) ] for j in range(self.length) ]
 		self.desiredMatrix = [ [ 0 for i in range(self.length) ] for j in range(self.length) ]
+		self.precedentMatrix = [ [ 0 for i in range(self.length) ] for j in range(self.length) ]
 
 		i = 0
 		while i < self.length:
 			self.currentMatrix[i] = currentMatrix[i].copy()
+			self.precedentMatrix[i] = currentMatrix[i].copy()
 			self.desiredMatrix[i] = desiredMatrix[i].copy()
 			i += 1
-
-		self.precedentId = 'none'
-		self.calculateId()
