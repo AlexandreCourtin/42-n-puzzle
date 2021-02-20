@@ -1,5 +1,6 @@
 import sys
 import argparse
+from puzzleMatrix import *
 
 # PUT SCORES IN A LIST THEN SORT THIS LIST
 # PUT ALREADY CHECKED BOARD AND SCORES IN A SECOND LIST
