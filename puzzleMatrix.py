@@ -21,6 +21,8 @@ class PuzzleMatrix():
 		if self.currentMatrix == None:
 			return
 
+		self.heuristicValue = 0
+
 		distanceMatrix = [ [ 0 for i in range(self.length) ] for j in range(self.length) ]
 		i = 0
 		while i < self.length:
