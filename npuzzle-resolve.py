@@ -132,3 +132,16 @@ if __name__ == '__main__':
 	fourthMatrix = PuzzleMatrix(length, puzzleMatrix, desiredMatrix)
 	fourthMatrix.changeTile(0, -1)
 	fourthMatrix.calculateManhattanScore(attemptNumber)
+
+	alreadyCheckedList = []
+	alreadyCheckedList.append(puzzleMatrix)
+
+	toCheckList = []
+	if firstMatrix.currentMatrix != None:
+		toCheckList.append(firstMatrix)
+	if secondMatrix.currentMatrix != None:
+		toCheckList.append(secondMatrix)
+	if thirdMatrix.currentMatrix != None:
+		toCheckList.append(thirdMatrix)
+	if fourthMatrix.currentMatrix != None:
+		toCheckList.append(fourthMatrix)
