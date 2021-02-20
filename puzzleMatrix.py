@@ -22,7 +22,6 @@ class PuzzleMatrix():
 			return
 
 		distanceMatrix = [ [ 0 for i in range(self.length) ] for j in range(self.length) ]
-		heuristicValue = 0
 		i = 0
 		while i < self.length:
 			j = 0
@@ -37,34 +36,35 @@ class PuzzleMatrix():
 							desiredNumber = self.desiredMatrix[ii][jj]
 							if desiredNumber == puzzleNumber:
 								distanceMatrix[i][j] = (max([ii, i]) - min([ii, i])) + (max([jj, j]) - min([jj, j]))
-								heuristicValue += distanceMatrix[i][j]
+								self.heuristicValue += distanceMatrix[i][j]
 							jj += 1
 						ii += 1
 	
 				j += 1
 			i += 1
-	
+
 		print('matrix is:')
 		for array in self.currentMatrix:
 			print(Bcolors.GREEN + str(array) + Bcolors.ENDC)
 	
-		print('distance matrix is:')
-		for array in distanceMatrix:
-			print(Bcolors.GREEN + str(array) + Bcolors.ENDC)
+		# print('distance matrix is:')
+		# for array in distanceMatrix:
+		# 	print(Bcolors.GREEN + str(array) + Bcolors.ENDC)
 
-		print('precedent matrix is:')
-		for array in self.precedentMatrix:
-			print(Bcolors.GREEN + str(array) + Bcolors.ENDC)
+		# print('precedent matrix is:')
+		# for array in self.precedentMatrix:
+		# 	print(Bcolors.GREEN + str(array) + Bcolors.ENDC)
 
 		print('attemptNumber ' + Bcolors.YELLOW + str(attemptNumber) + Bcolors.ENDC
-			+ ' + heuristicValue ' + Bcolors.YELLOW + str(heuristicValue) + Bcolors.ENDC
-			+ ' = score ' + Bcolors.GREEN + str(attemptNumber + heuristicValue) + Bcolors.ENDC)
-	
+			+ ' + heuristicValue ' + Bcolors.YELLOW + str(self.heuristicValue) + Bcolors.ENDC
+			+ ' = score ' + Bcolors.GREEN + str(attemptNumber + self.heuristicValue) + Bcolors.ENDC)
+
 	def __init__(self, length, currentMatrix, desiredMatrix):
 		self.length = length
 		self.currentMatrix = [ [ 0 for i in range(self.length) ] for j in range(self.length) ]
 		self.desiredMatrix = [ [ 0 for i in range(self.length) ] for j in range(self.length) ]
 		self.precedentMatrix = [ [ 0 for i in range(self.length) ] for j in range(self.length) ]
+		self.heuristicValue = -1
 
 		i = 0
 		while i < self.length:

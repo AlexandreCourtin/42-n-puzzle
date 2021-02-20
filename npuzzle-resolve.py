@@ -117,18 +117,18 @@ if __name__ == '__main__':
 	attemptNumber = 0
 	print('attempt number: ' + Bcolors.GREEN + str(attemptNumber) + Bcolors.ENDC)
 
+	firstMatrix = PuzzleMatrix(length, puzzleMatrix, desiredMatrix)
+	firstMatrix.changeTile(1, 0)
+	firstMatrix.calculateManhattanScore(attemptNumber)
+
 	secondMatrix = PuzzleMatrix(length, puzzleMatrix, desiredMatrix)
-	secondMatrix.changeTile(1, 0)
+	secondMatrix.changeTile(-1, 0)
 	secondMatrix.calculateManhattanScore(attemptNumber)
 
 	thirdMatrix = PuzzleMatrix(length, puzzleMatrix, desiredMatrix)
-	thirdMatrix.changeTile(-1, 0)
+	thirdMatrix.changeTile(0, 1)
 	thirdMatrix.calculateManhattanScore(attemptNumber)
 
 	fourthMatrix = PuzzleMatrix(length, puzzleMatrix, desiredMatrix)
-	fourthMatrix.changeTile(0, 1)
+	fourthMatrix.changeTile(0, -1)
 	fourthMatrix.calculateManhattanScore(attemptNumber)
-
-	fithMatrix = PuzzleMatrix(length, puzzleMatrix, desiredMatrix)
-	fithMatrix.changeTile(0, -1)
-	fithMatrix.calculateManhattanScore(attemptNumber)
