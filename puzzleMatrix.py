@@ -7,14 +7,20 @@ class PuzzleMatrix():
 		while i < self.length and done == False:
 			j = 0
 			while j < self.length and done == False:
-				if j + paramX < self.length and i + paramY < self.length and j + paramX >= 0 and i + paramY >= 0 and self.currentMatrix[i][j] == 0:
-					self.currentMatrix[i][j] = self.currentMatrix[i + paramY][j + paramX]
-					self.currentMatrix[i + paramY][j + paramX] = 0
+				if self.currentMatrix[i][j] == 0:
+					if j + paramX < self.length and i + paramY < self.length and j + paramX >= 0 and i + paramY >= 0:
+						self.currentMatrix[i][j] = self.currentMatrix[i + paramY][j + paramX]
+						self.currentMatrix[i + paramY][j + paramX] = 0
+					else:
+						self.currentMatrix = None
 					done = True
 				j += 1
 			i += 1
 
 	def calculateManhattanScore(self, attemptNumber):
+		if self.currentMatrix == None:
+			return
+
 		distanceMatrix = [ [ 0 for i in range(self.length) ] for j in range(self.length) ]
 		heuristicValue = 0
 		i = 0
