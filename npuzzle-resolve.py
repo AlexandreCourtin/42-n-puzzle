@@ -248,6 +248,10 @@ if __name__ == '__main__':
 		neighbors_list[2] = changeTile(currentMatrix, 0, 1)
 		neighbors_list[3] = changeTile(currentMatrix, 0, -1)
 		return neighbors_list
+	
+	def printMatrix(m):
+		for row in m:
+			print(row)
 
 	frontier = PriorityQueue()
 	frontier.put(startMatrix, 0)
@@ -259,12 +263,31 @@ if __name__ == '__main__':
 	came_from[matrix_to_id(startMatrix)] = None
 	cost_so_far[matrix_to_id(startMatrix)] = 0
 
-	while not frontier.empty():
+	i = 0
+	# while not frontier.empty():
+	while i < 2:
+		print('initial matrix')
 		currentMatrix = frontier.get()
+		printMatrix(currentMatrix)
+		print('===============')
 
 		if currentMatrix == desiredMatrix:
 			print('win!')
 			break
 
 		for nextMatrix in neighbors(currentMatrix):
-			print(nextMatrix)
+			if nextMatrix != None:
+				currentId = matrix_to_id(currentMatrix)
+				nextId = matrix_to_id(nextMatrix)
+				printMatrix(nextMatrix)
+				new_cost = cost_so_far[currentId] + 1
+				print(new_cost)
+				print(heuristic(nextMatrix))
+				print(currentId)
+				print(nextId)
+				if nextId not in cost_so_far or new_cost < cost_so_far[nextId]:
+					cost_so_far[nextId] = new_cost
+					print('score final: ' + str(new_cost + heuristic(nextMatrix)))
+					frontier.put(nextMatrix, new_cost + heuristic(nextMatrix))
+					came_from[nextId] = currentMatrix
+		i += 1
