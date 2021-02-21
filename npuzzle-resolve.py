@@ -3,10 +3,6 @@ import argparse
 from bcolors import *
 from puzzleMatrix import *
 
-# PUT SCORES IN A LIST THEN SORT THIS LIST
-# PUT ALREADY CHECKED BOARD AND SCORES IN A SECOND LIST
-# KEEP A RECORD OF THE MATRIX YOU CAME FROM SO YOU CAN RETRACE EVERYTHING TO THE BEGINING
-
 def getHeur(elem):
 	return elem.heuristicValue
 
@@ -122,23 +118,23 @@ if __name__ == '__main__':
 	toCheckList = []
 	print('attempt number: ' + Bcolors.GREEN + str(attemptNumber) + Bcolors.ENDC)
 
+	alreadyCheckedList.append(puzzleMatrix)
+
 	firstMatrix = PuzzleMatrix(length, puzzleMatrix, desiredMatrix)
-	firstMatrix.changeTile(1, 0)
+	firstMatrix.changeTile(1, 0, alreadyCheckedList)
 	firstMatrix.calculateManhattanScore(attemptNumber)
 
 	secondMatrix = PuzzleMatrix(length, puzzleMatrix, desiredMatrix)
-	secondMatrix.changeTile(-1, 0)
+	secondMatrix.changeTile(-1, 0, alreadyCheckedList)
 	secondMatrix.calculateManhattanScore(attemptNumber)
 
 	thirdMatrix = PuzzleMatrix(length, puzzleMatrix, desiredMatrix)
-	thirdMatrix.changeTile(0, 1)
+	thirdMatrix.changeTile(0, 1, alreadyCheckedList)
 	thirdMatrix.calculateManhattanScore(attemptNumber)
 
 	fourthMatrix = PuzzleMatrix(length, puzzleMatrix, desiredMatrix)
-	fourthMatrix.changeTile(0, -1)
+	fourthMatrix.changeTile(0, -1, alreadyCheckedList)
 	fourthMatrix.calculateManhattanScore(attemptNumber)
-
-	alreadyCheckedList.append(puzzleMatrix)
 
 	if firstMatrix.currentMatrix != None:
 		toCheckList.append(firstMatrix)

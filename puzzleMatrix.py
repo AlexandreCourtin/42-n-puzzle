@@ -1,7 +1,7 @@
 from bcolors import *
 
 class PuzzleMatrix():
-	def changeTile(self, paramX, paramY):
+	def changeTile(self, paramX, paramY, alreadyCheckedList):
 		done = False
 		i = 0
 		while i < self.length and done == False:
@@ -16,6 +16,11 @@ class PuzzleMatrix():
 					done = True
 				j += 1
 			i += 1
+
+		# CHECK IF IS IN LIST
+		for cl in alreadyCheckedList:
+			if self.currentMatrix == cl:
+				self.currentMatrix = None
 
 	def calculateManhattanScore(self, attemptNumber):
 		if self.currentMatrix == None:
