@@ -4,78 +4,8 @@ import queue
 import time
 
 from bcolors import *
-# from puzzleMatrix import *
-
-# def resolveLoop(attempt):
-# 	print('===')
-# 	nextCheckedMatrix = [ [ 0 for i in range(length) ] for j in range(length) ]
-
-# 	i = 0
-# 	while i < length:
-# 		nextCheckedMatrix[i] = puzzleMatrix[i].copy()
-# 		i += 1
-
-# 	alreadyCheckedList.append(puzzleMatrix)
-
-# 	i = 0
-# 	while i < length:
-# 		print(nextCheckedMatrix[i])
-# 		i += 1
-
-# 	firstMatrix = PuzzleMatrix(length, attempt + 1, nextCheckedMatrix, desiredMatrix)
-# 	firstMatrix.changeTile(1, 0, alreadyCheckedList, toCheckList)
-# 	firstMatrix.calculateManhattanScore()
-
-# 	secondMatrix = PuzzleMatrix(length, attempt + 1, nextCheckedMatrix, desiredMatrix)
-# 	secondMatrix.changeTile(-1, 0, alreadyCheckedList, toCheckList)
-# 	secondMatrix.calculateManhattanScore()
-
-# 	thirdMatrix = PuzzleMatrix(length, attempt + 1, nextCheckedMatrix, desiredMatrix)
-# 	thirdMatrix.changeTile(0, 1, alreadyCheckedList, toCheckList)
-# 	thirdMatrix.calculateManhattanScore()
-
-# 	fourthMatrix = PuzzleMatrix(length, attempt + 1, nextCheckedMatrix, desiredMatrix)
-# 	fourthMatrix.changeTile(0, -1, alreadyCheckedList, toCheckList)
-# 	fourthMatrix.calculateManhattanScore()
-
-# 	hasFinished = firstMatrix.checkIfDesired() or secondMatrix.checkIfDesired() or thirdMatrix.checkIfDesired() or fourthMatrix.checkIfDesired()
-
-# 	if firstMatrix.currentMatrix != None:
-# 		toCheckList.append(firstMatrix)
-# 	if secondMatrix.currentMatrix != None:
-# 		toCheckList.append(secondMatrix)
-# 	if thirdMatrix.currentMatrix != None:
-# 		toCheckList.append(thirdMatrix)
-# 	if fourthMatrix.currentMatrix != None:
-# 		toCheckList.append(fourthMatrix)
-# 	toCheckList.sort(key=getHeur)
-
-# 	# print('alreadyCheckedList')
-# 	# for cm in alreadyCheckedList:
-# 	# 	print(Bcolors.GREEN + str(cm) + Bcolors.ENDC)
-
-# 	# print('toCheckList')
-# 	# for cm in toCheckList:
-# 	# 	print(Bcolors.GREEN + str(cm.heuristicValue) + Bcolors.ENDC)
-
-# 	futureAttempt = -5
-# 	if hasFinished == False:
-# 		i = 0
-# 		while i < length:
-# 			puzzleMatrix[i] = toCheckList[0].currentMatrix[i].copy()
-# 			# print(puzzleMatrix[i])
-# 			i += 1
-# 		futureAttempt = toCheckList[0].attemptNumber
-# 		toCheckList.pop(0)
-
-# 	return futureAttempt
-
-# def getHeur(elem):
-# 	return elem.scoreValue
 
 if __name__ == '__main__':
-	start_time = time.time()
-
 	parser = argparse.ArgumentParser()
 
 	parser.add_argument('file', type=open, help='The puzzle to solve.')
@@ -182,15 +112,6 @@ if __name__ == '__main__':
 	print(Bcolors.YELLOW + '\n===== resolving n-puzzle with '
 		+ Bcolors.GREEN + args.function + Bcolors.YELLOW + ' heuristic function =====' + Bcolors.ENDC)
 
-	# alreadyCheckedList = []
-	# toCheckList = []
-
-	# okAttemptNumber = -1
-	# iii = 0
-	# while okAttemptNumber != -5:
-	# 	okAttemptNumber = resolveLoop(okAttemptNumber)
-	# 	iii += 1
-
 	def matrix_to_id(matrix):
 		result = ''
 		for row in matrix:
@@ -259,6 +180,10 @@ if __name__ == '__main__':
 	matrix_queue = queue.Queue()
 	matrix_queue.put(startMatrix, 0)
 
+	selected_opened_state_count = 0
+	maximum_state_count = 1
+	current_state_count = 1
+
 	id_to_matrix = dict()
 	came_from = dict()
 	cost_so_far = dict()
@@ -266,33 +191,32 @@ if __name__ == '__main__':
 	came_from[matrix_to_id(startMatrix)] = None
 	cost_so_far[matrix_to_id(startMatrix)] = 0
 
-	print('initial matrix')
-	printMatrix(startMatrix)
+	start_time = time.time()
 	while not matrix_queue.empty():
-		# print('initial matrix')
 		currentMatrix = matrix_queue.get()
-		# printMatrix(currentMatrix)
-		# print('===============')
+		selected_opened_state_count += 1
+		current_state_count -= 1
 
 		if currentMatrix == desiredMatrix:
-			print('win! time = ' + str(time.time() - start_time))
-			printMatrix(currentMatrix)
+			print(Bcolors.GREEN + 'win!' + Bcolors.ENDC)
+			# print_path_from(currentMatrix)
+			print('time = ' + Bcolors.GREEN + str(time.time() - start_time) + Bcolors.ENDC)
+			print('selected opened state count = ' + Bcolors.GREEN + str(selected_opened_state_count) + Bcolors.ENDC)
+			print('maximum state count in memory = ' + Bcolors.GREEN + str(maximum_state_count) + Bcolors.ENDC)
 			break
 
 		for nextMatrix in neighbors(currentMatrix):
 			if nextMatrix != None:
 				currentId = matrix_to_id(currentMatrix)
 				nextId = matrix_to_id(nextMatrix)
-				# printMatrix(nextMatrix)
 				new_cost = cost_so_far[currentId] + 1
 				next_matrix_heuristic = heuristic(nextMatrix)
-				# print(new_cost)
-				# print(next_matrix_heuristic)
-				# print(currentId)
-				# print(nextId)
 				if nextId not in cost_so_far or new_cost < cost_so_far[nextId]:
 					cost_so_far[nextId] = new_cost
 					new_cost_with_heuristic = new_cost + next_matrix_heuristic
-					# print('score final: ' + str(-new_cost_with_heuristic))
 					matrix_queue.put(nextMatrix, -new_cost_with_heuristic)
 					came_from[nextId] = currentMatrix
+					id_to_matrix[nextId] = nextMatrix
+					current_state_count += 1
+					if maximum_state_count < current_state_count:
+						maximum_state_count = current_state_count
