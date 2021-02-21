@@ -2,22 +2,18 @@ import sys
 import argparse
 import queue
 import time
+import random
 
 from bcolors import *
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
 
-	parser.add_argument('file', type=open, help='The puzzle to solve.')
-	parser.add_argument('-f', '--function', type=str, default='manhattan-distance', help='Choose heuristic function between: manhattan-distance')
+	parser.add_argument('-f', '--file', type=open, help='File containing the puzzle to solve.')
+	parser.add_argument('-g', '--generate', type=int, help='Generate matrix of choosen length.')
+	# parser.add_argument('-f', '--function', type=str, default='manhattan-distance', help='Choose heuristic function between: manhattan-distance')
 
 	args = parser.parse_args()
-
-	if not args.file:
-		print('file error')
-		sys.exit(1)
-
-	print(Bcolors.YELLOW + '===== reading file =====' + Bcolors.ENDC)
 
 	line_count = 0
 	row = 0
@@ -27,36 +23,59 @@ if __name__ == '__main__':
 	start_matrix = []
 	desired_matrix = []
 
-	while True:
-		print('line {}:'.format(line_count))
-		line = args.file.readline().split()
+	if args.file:
+		print(Bcolors.YELLOW + '===== reading file =====' + Bcolors.ENDC)
 
-		for char in line:
-			if char.isnumeric():
-				print(char, end = '|')
-				if not has_length:
-					length = int(char)
-					has_length = True
-					start_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
-					desired_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
+		while True:
+			print('line {}:'.format(line_count))
+			line = args.file.readline().split()
+	
+			for char in line:
+				if char.isnumeric():
+					print(char, end = '|')
+					if not has_length:
+						length = int(char)
+						has_length = True
+						start_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
+						desired_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
+					else:
+						if row < length and column < length:
+							start_matrix[row][column] = int(char)
+							column += 1
+							if column >= length:
+								column = 0
+								row += 1
 				else:
-					if row < length and column < length:
-						start_matrix[row][column] = int(char)
-						column += 1
-						if column >= length:
-							column = 0
-							row += 1
-			else:
+					break
+			print('')
+
+			if not line:
 				break
-		print('')
 
-		if not line:
-			break
+			line_count += 1
+	elif args.generate:
+		print(Bcolors.YELLOW + '===== generate random matrix =====' + Bcolors.ENDC)
 
-		line_count += 1
+		length = args.generate
 
-	print(Bcolors.YELLOW + '\n===== file summary =====' + Bcolors.ENDC)
-	print('heuristic function is {}'.format(Bcolors.GREEN + args.function + Bcolors.ENDC))
+		start_matrix = [ [ -1 for i in range(length) ] for j in range(length) ]
+		desired_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
+		r = 0
+		while r < length * length:
+			i = random.randint(0, length - 1)
+			j = random.randint(0, length - 1)
+			while start_matrix[i][j] != -1:
+				i = random.randint(0, length - 1)
+				j = random.randint(0, length - 1)
+			start_matrix[i][j] = r
+			r += 1
+
+	else:
+		print('args error')
+		sys.exit(1)
+
+	print(Bcolors.YELLOW + '\n===== matrix summary =====' + Bcolors.ENDC)
+	# print('heuristic function is {}'.format(Bcolors.GREEN + args.function + Bcolors.ENDC))
 	print('length is {}'.format(Bcolors.GREEN + str(length) + Bcolors.ENDC))
 	print('matrix is:')
 	for array in start_matrix:
@@ -110,7 +129,7 @@ if __name__ == '__main__':
 		print(Bcolors.GREEN + str(array) + Bcolors.ENDC)
 
 	print(Bcolors.YELLOW + '\n===== resolving n-puzzle with '
-		+ Bcolors.GREEN + args.function + Bcolors.YELLOW + ' heuristic function =====' + Bcolors.ENDC)
+		+ Bcolors.GREEN + 'manhattan-distance' + Bcolors.YELLOW + ' heuristic function =====' + Bcolors.ENDC)
 
 	def matrix_to_id(matrix):
 		result = ''
