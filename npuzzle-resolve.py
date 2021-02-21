@@ -177,6 +177,13 @@ if __name__ == '__main__':
 		for row in m:
 			print(row)
 
+	def print_path_from(finalMatrix):
+		previousMatrix = came_from[matrix_to_id(finalMatrix)]
+		while previousMatrix:
+			printMatrix(previousMatrix)
+			print(Bcolors.YELLOW + '================' + Bcolors.ENDC)
+			previousMatrix = came_from[matrix_to_id(previousMatrix)]
+
 	matrix_queue = queue.Queue()
 	matrix_queue.put(startMatrix, 0)
 
@@ -184,10 +191,10 @@ if __name__ == '__main__':
 	maximum_state_count = 1
 	current_state_count = 1
 
-	id_to_matrix = dict()
+	# id_to_matrix = dict()
 	came_from = dict()
 	cost_so_far = dict()
-	id_to_matrix[matrix_to_id(startMatrix)] = startMatrix
+	# id_to_matrix[matrix_to_id(startMatrix)] = startMatrix
 	came_from[matrix_to_id(startMatrix)] = None
 	cost_so_far[matrix_to_id(startMatrix)] = 0
 
@@ -199,7 +206,7 @@ if __name__ == '__main__':
 
 		if currentMatrix == desiredMatrix:
 			print(Bcolors.GREEN + 'win!' + Bcolors.ENDC)
-			# print_path_from(currentMatrix)
+			print_path_from(currentMatrix)
 			print('time = ' + Bcolors.GREEN + str(time.time() - start_time) + Bcolors.ENDC)
 			print('selected opened state count = ' + Bcolors.GREEN + str(selected_opened_state_count) + Bcolors.ENDC)
 			print('maximum state count in memory = ' + Bcolors.GREEN + str(maximum_state_count) + Bcolors.ENDC)
@@ -216,7 +223,7 @@ if __name__ == '__main__':
 					new_cost_with_heuristic = new_cost + next_matrix_heuristic
 					matrix_queue.put(nextMatrix, -new_cost_with_heuristic)
 					came_from[nextId] = currentMatrix
-					id_to_matrix[nextId] = nextMatrix
+					# id_to_matrix[nextId] = nextMatrix
 					current_state_count += 1
 					if maximum_state_count < current_state_count:
 						maximum_state_count = current_state_count
