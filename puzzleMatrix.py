@@ -4,7 +4,7 @@ class PuzzleMatrix():
 	def checkIfDesired(self):
 		return self.currentMatrix == self.desiredMatrix
 
-	def changeTile(self, paramX, paramY, alreadyCheckedList):
+	def changeTile(self, paramX, paramY, alreadyCheckedList, toCheckList):
 		done = False
 		i = 0
 		while i < self.length and done == False:
@@ -22,6 +22,9 @@ class PuzzleMatrix():
 
 		# CHECK IF IS IN LIST
 		for cl in alreadyCheckedList:
+			if self.currentMatrix == cl:
+				self.currentMatrix = None
+		for cl in toCheckList:
 			if self.currentMatrix == cl:
 				self.currentMatrix = None
 
@@ -46,7 +49,7 @@ class PuzzleMatrix():
 						while jj < self.length:
 							desiredNumber = self.desiredMatrix[ii][jj]
 							if desiredNumber == puzzleNumber:
-								distanceMatrix[i][j] = (max([ii, i]) - min([ii, i])) + (max([jj, j]) - min([jj, j]))
+								distanceMatrix[i][j] = abs(i - ii) + abs(j - jj)
 								self.heuristicValue += distanceMatrix[i][j]
 							jj += 1
 						ii += 1
@@ -55,9 +58,9 @@ class PuzzleMatrix():
 			i += 1
 		self.scoreValue = self.heuristicValue + self.attemptNumber
 
-		print('matrix is:')
-		for array in self.currentMatrix:
-			print(Bcolors.GREEN + str(array) + Bcolors.ENDC)
+		# print('matrix is:')
+		# for array in self.currentMatrix:
+		# 	print(Bcolors.GREEN + str(array) + Bcolors.ENDC)
 	
 		# print('distance matrix is:')
 		# for array in distanceMatrix:

@@ -1,72 +1,76 @@
 import sys
 import argparse
+from queue import PriorityQueue
+
 from bcolors import *
-from puzzleMatrix import *
+# from puzzleMatrix import *
 
-def resolveLoop(attempt):
-	print('attempt number: ' + Bcolors.GREEN + str(attempt) + Bcolors.ENDC)
+# def resolveLoop(attempt):
+# 	print('===')
+# 	nextCheckedMatrix = [ [ 0 for i in range(length) ] for j in range(length) ]
 
-	nextCheckedMatrix = [ [ 0 for i in range(length) ] for j in range(length) ]
+# 	i = 0
+# 	while i < length:
+# 		nextCheckedMatrix[i] = puzzleMatrix[i].copy()
+# 		i += 1
 
-	i = 0
-	while i < length:
-		nextCheckedMatrix[i] = puzzleMatrix[i].copy()
-		i += 1
+# 	alreadyCheckedList.append(puzzleMatrix)
 
-	alreadyCheckedList.append(nextCheckedMatrix)
+# 	i = 0
+# 	while i < length:
+# 		print(nextCheckedMatrix[i])
+# 		i += 1
 
-	firstMatrix = PuzzleMatrix(length, attempt, nextCheckedMatrix, desiredMatrix)
-	firstMatrix.changeTile(1, 0, alreadyCheckedList)
-	firstMatrix.calculateManhattanScore()
+# 	firstMatrix = PuzzleMatrix(length, attempt + 1, nextCheckedMatrix, desiredMatrix)
+# 	firstMatrix.changeTile(1, 0, alreadyCheckedList, toCheckList)
+# 	firstMatrix.calculateManhattanScore()
 
-	secondMatrix = PuzzleMatrix(length, attempt, nextCheckedMatrix, desiredMatrix)
-	secondMatrix.changeTile(-1, 0, alreadyCheckedList)
-	secondMatrix.calculateManhattanScore()
+# 	secondMatrix = PuzzleMatrix(length, attempt + 1, nextCheckedMatrix, desiredMatrix)
+# 	secondMatrix.changeTile(-1, 0, alreadyCheckedList, toCheckList)
+# 	secondMatrix.calculateManhattanScore()
 
-	thirdMatrix = PuzzleMatrix(length, attempt, nextCheckedMatrix, desiredMatrix)
-	thirdMatrix.changeTile(0, 1, alreadyCheckedList)
-	thirdMatrix.calculateManhattanScore()
+# 	thirdMatrix = PuzzleMatrix(length, attempt + 1, nextCheckedMatrix, desiredMatrix)
+# 	thirdMatrix.changeTile(0, 1, alreadyCheckedList, toCheckList)
+# 	thirdMatrix.calculateManhattanScore()
 
-	fourthMatrix = PuzzleMatrix(length, attempt, nextCheckedMatrix, desiredMatrix)
-	fourthMatrix.changeTile(0, -1, alreadyCheckedList)
-	fourthMatrix.calculateManhattanScore()
+# 	fourthMatrix = PuzzleMatrix(length, attempt + 1, nextCheckedMatrix, desiredMatrix)
+# 	fourthMatrix.changeTile(0, -1, alreadyCheckedList, toCheckList)
+# 	fourthMatrix.calculateManhattanScore()
 
-	hasFinished = firstMatrix.checkIfDesired() or secondMatrix.checkIfDesired() or thirdMatrix.checkIfDesired() or fourthMatrix.checkIfDesired()
-	if firstMatrix.currentMatrix != None:
-		toCheckList.append(firstMatrix)
-	if secondMatrix.currentMatrix != None:
-		toCheckList.append(secondMatrix)
-	if thirdMatrix.currentMatrix != None:
-		toCheckList.append(thirdMatrix)
-	if fourthMatrix.currentMatrix != None:
-		toCheckList.append(fourthMatrix)
+# 	hasFinished = firstMatrix.checkIfDesired() or secondMatrix.checkIfDesired() or thirdMatrix.checkIfDesired() or fourthMatrix.checkIfDesired()
 
-	print('alreadyCheckedList')
-	for cm in alreadyCheckedList:
-		print(Bcolors.GREEN + str(cm) + Bcolors.ENDC)
+# 	if firstMatrix.currentMatrix != None:
+# 		toCheckList.append(firstMatrix)
+# 	if secondMatrix.currentMatrix != None:
+# 		toCheckList.append(secondMatrix)
+# 	if thirdMatrix.currentMatrix != None:
+# 		toCheckList.append(thirdMatrix)
+# 	if fourthMatrix.currentMatrix != None:
+# 		toCheckList.append(fourthMatrix)
+# 	toCheckList.sort(key=getHeur)
 
-	print('toCheckList')
-	for cm in toCheckList:
-		print(Bcolors.GREEN + str(cm.heuristicValue) + Bcolors.ENDC)
+# 	# print('alreadyCheckedList')
+# 	# for cm in alreadyCheckedList:
+# 	# 	print(Bcolors.GREEN + str(cm) + Bcolors.ENDC)
 
-	toCheckList.sort(key=getHeur)
-	print('sorted toCheckList')
-	for cm in toCheckList:
-		print(Bcolors.GREEN + str(cm.scoreValue) + Bcolors.ENDC)
+# 	# print('toCheckList')
+# 	# for cm in toCheckList:
+# 	# 	print(Bcolors.GREEN + str(cm.heuristicValue) + Bcolors.ENDC)
 
-	futureAttempt = -2
-	if hasFinished == False:
-		i = 0
-		while i < length:
-			puzzleMatrix[i] = toCheckList[0].currentMatrix[i].copy()
-			i += 1
-		futureAttempt = toCheckList[0].attemptNumber
-		toCheckList.pop(0)
+# 	futureAttempt = -5
+# 	if hasFinished == False:
+# 		i = 0
+# 		while i < length:
+# 			puzzleMatrix[i] = toCheckList[0].currentMatrix[i].copy()
+# 			# print(puzzleMatrix[i])
+# 			i += 1
+# 		futureAttempt = toCheckList[0].attemptNumber
+# 		toCheckList.pop(0)
 
-	return futureAttempt + 1
+# 	return futureAttempt
 
-def getHeur(elem):
-	return elem.scoreValue
+# def getHeur(elem):
+# 	return elem.scoreValue
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
@@ -87,7 +91,7 @@ if __name__ == '__main__':
 	columnCount = 0
 	length = 0
 	hasLength = False
-	puzzleMatrix = []
+	startMatrix = []
 	desiredMatrix = []
 
 	while True:
@@ -100,11 +104,11 @@ if __name__ == '__main__':
 				if not hasLength:
 					length = int(char)
 					hasLength = True
-					puzzleMatrix = [ [ 0 for i in range(length) ] for j in range(length) ]
+					startMatrix = [ [ 0 for i in range(length) ] for j in range(length) ]
 					desiredMatrix = [ [ 0 for i in range(length) ] for j in range(length) ]
 				else:
 					if rowCount < length and columnCount < length:
-						puzzleMatrix[rowCount][columnCount] = int(char)
+						startMatrix[rowCount][columnCount] = int(char)
 						columnCount += 1
 						if columnCount >= length:
 							columnCount = 0
@@ -122,12 +126,12 @@ if __name__ == '__main__':
 	print('heuristic function is {}'.format(Bcolors.GREEN + args.function + Bcolors.ENDC))
 	print('length is {}'.format(Bcolors.GREEN + str(length) + Bcolors.ENDC))
 	print('matrix is:')
-	for array in puzzleMatrix:
+	for array in startMatrix:
 		print(Bcolors.GREEN + str(array) + Bcolors.ENDC)
 
 	print(Bcolors.YELLOW + '\n===== check if only one zero in matrix =====' + Bcolors.ENDC)
 	zeroNumber = 0
-	for array in puzzleMatrix:
+	for array in startMatrix:
 		for number in array:
 			if number == 0:
 				zeroNumber += 1
@@ -175,9 +179,92 @@ if __name__ == '__main__':
 	print(Bcolors.YELLOW + '\n===== resolving n-puzzle with '
 		+ Bcolors.GREEN + args.function + Bcolors.YELLOW + ' heuristic function =====' + Bcolors.ENDC)
 
-	alreadyCheckedList = []
-	toCheckList = []
+	# alreadyCheckedList = []
+	# toCheckList = []
 
-	okAttemptNumber = 0
-	while okAttemptNumber != -1:
-		okAttemptNumber = resolveLoop(okAttemptNumber)
+	# okAttemptNumber = -1
+	# iii = 0
+	# while okAttemptNumber != -5:
+	# 	okAttemptNumber = resolveLoop(okAttemptNumber)
+	# 	iii += 1
+
+	def matrix_to_id(matrix):
+		result = ''
+		for row in matrix:
+			for char in row:
+				result += str(char)
+		return result
+
+	def heuristic(nextMatrix):
+		heuristicValue = 0
+		i = 0
+		while i < length:
+			j = 0
+			while j < length:
+				puzzleNumber = nextMatrix[i][j]
+
+				if puzzleNumber != 0:
+					ii = 0
+					while ii < length:
+						jj = 0
+						while jj < length:
+							desiredNumber = desiredMatrix[ii][jj]
+							if desiredNumber == puzzleNumber:
+								heuristicValue += abs(i - ii) + abs(j - jj)
+							jj += 1
+						ii += 1
+
+				j += 1
+			i += 1
+		return heuristicValue
+
+	def changeTile(currentMatrix, paramX, paramY):
+		changedTileMatrix = [ [ 0 for i in range(length) ] for j in range(length) ]
+		i = 0
+		while i < length:
+			changedTileMatrix[i] = currentMatrix[i].copy()
+			i += 1
+
+		isDone = False
+		i = 0
+		while i < length and not isDone:
+			j = 0
+			while j < length and not isDone:
+				if changedTileMatrix[i][j] == 0:
+					if j + paramX < length and i + paramY < length and j + paramX >= 0 and i + paramY >= 0:
+						changedTileMatrix[i][j] = changedTileMatrix[i + paramY][j + paramX]
+						changedTileMatrix[i + paramY][j + paramX] = 0
+					else:
+						changedTileMatrix = None
+					isDone = True
+				j += 1
+			i += 1
+		return changedTileMatrix
+
+	def neighbors(currentMatrix):
+		neighbors_list = [[], [], [], []]
+		neighbors_list[0] = changeTile(currentMatrix, 1, 0)
+		neighbors_list[1] = changeTile(currentMatrix, -1, 0)
+		neighbors_list[2] = changeTile(currentMatrix, 0, 1)
+		neighbors_list[3] = changeTile(currentMatrix, 0, -1)
+		return neighbors_list
+
+	frontier = PriorityQueue()
+	frontier.put(startMatrix, 0)
+
+	id_to_matrix = dict()
+	came_from = dict()
+	cost_so_far = dict()
+	id_to_matrix[matrix_to_id(startMatrix)] = startMatrix
+	came_from[matrix_to_id(startMatrix)] = None
+	cost_so_far[matrix_to_id(startMatrix)] = 0
+
+	while not frontier.empty():
+		currentMatrix = frontier.get()
+
+		if currentMatrix == desiredMatrix:
+			print('win!')
+			break
+
+		for nextMatrix in neighbors(currentMatrix):
+			print(nextMatrix)
