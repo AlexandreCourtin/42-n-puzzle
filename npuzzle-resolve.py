@@ -3,6 +3,64 @@ import argparse
 from bcolors import *
 from puzzleMatrix import *
 
+def resolveLoop(attempt):
+	print('attempt number: ' + Bcolors.GREEN + str(attempt) + Bcolors.ENDC)
+
+	nextCheckedMatrix = [ [ 0 for i in range(length) ] for j in range(length) ]
+
+	i = 0
+	while i < length:
+		nextCheckedMatrix[i] = puzzleMatrix[i].copy()
+		i += 1
+
+	alreadyCheckedList.append(nextCheckedMatrix)
+
+	firstMatrix = PuzzleMatrix(length, attempt, puzzleMatrix, desiredMatrix)
+	firstMatrix.changeTile(1, 0, alreadyCheckedList)
+	firstMatrix.calculateManhattanScore()
+
+	secondMatrix = PuzzleMatrix(length, attempt, puzzleMatrix, desiredMatrix)
+	secondMatrix.changeTile(-1, 0, alreadyCheckedList)
+	secondMatrix.calculateManhattanScore()
+
+	thirdMatrix = PuzzleMatrix(length, attempt, puzzleMatrix, desiredMatrix)
+	thirdMatrix.changeTile(0, 1, alreadyCheckedList)
+	thirdMatrix.calculateManhattanScore()
+
+	fourthMatrix = PuzzleMatrix(length, attempt, puzzleMatrix, desiredMatrix)
+	fourthMatrix.changeTile(0, -1, alreadyCheckedList)
+	fourthMatrix.calculateManhattanScore()
+
+	hasFinished = firstMatrix.checkIfDesired() or secondMatrix.checkIfDesired() or thirdMatrix.checkIfDesired() or fourthMatrix.checkIfDesired()
+	if firstMatrix.currentMatrix != None:
+		toCheckList.append(firstMatrix)
+	if secondMatrix.currentMatrix != None:
+		toCheckList.append(secondMatrix)
+	if thirdMatrix.currentMatrix != None:
+		toCheckList.append(thirdMatrix)
+	if fourthMatrix.currentMatrix != None:
+		toCheckList.append(fourthMatrix)
+
+	print('alreadyCheckedList')
+	for cm in alreadyCheckedList:
+		print(Bcolors.GREEN + str(cm) + Bcolors.ENDC)
+
+	print('toCheckList')
+	for cm in toCheckList:
+		print(Bcolors.GREEN + str(cm.heuristicValue) + Bcolors.ENDC)
+
+	toCheckList.sort(key=getHeur)
+	print('sorted toCheckList')
+	for cm in toCheckList:
+		print(Bcolors.GREEN + str(cm.heuristicValue) + Bcolors.ENDC)
+
+	if hasFinished == False:
+		i = 0
+		while i < length:
+			puzzleMatrix[i] = toCheckList[0].currentMatrix[i].copy()
+			i += 1
+		toCheckList.pop(0)
+
 def getHeur(elem):
 	return elem.heuristicValue
 
@@ -113,47 +171,8 @@ if __name__ == '__main__':
 	print(Bcolors.YELLOW + '\n===== resolving n-puzzle with '
 		+ Bcolors.GREEN + args.function + Bcolors.YELLOW + ' heuristic function =====' + Bcolors.ENDC)
 
-	attemptNumber = 0
 	alreadyCheckedList = []
 	toCheckList = []
-	print('attempt number: ' + Bcolors.GREEN + str(attemptNumber) + Bcolors.ENDC)
 
-	alreadyCheckedList.append(puzzleMatrix)
-
-	firstMatrix = PuzzleMatrix(length, puzzleMatrix, desiredMatrix)
-	firstMatrix.changeTile(1, 0, alreadyCheckedList)
-	firstMatrix.calculateManhattanScore(attemptNumber)
-
-	secondMatrix = PuzzleMatrix(length, puzzleMatrix, desiredMatrix)
-	secondMatrix.changeTile(-1, 0, alreadyCheckedList)
-	secondMatrix.calculateManhattanScore(attemptNumber)
-
-	thirdMatrix = PuzzleMatrix(length, puzzleMatrix, desiredMatrix)
-	thirdMatrix.changeTile(0, 1, alreadyCheckedList)
-	thirdMatrix.calculateManhattanScore(attemptNumber)
-
-	fourthMatrix = PuzzleMatrix(length, puzzleMatrix, desiredMatrix)
-	fourthMatrix.changeTile(0, -1, alreadyCheckedList)
-	fourthMatrix.calculateManhattanScore(attemptNumber)
-
-	if firstMatrix.currentMatrix != None:
-		toCheckList.append(firstMatrix)
-	if secondMatrix.currentMatrix != None:
-		toCheckList.append(secondMatrix)
-	if thirdMatrix.currentMatrix != None:
-		toCheckList.append(thirdMatrix)
-	if fourthMatrix.currentMatrix != None:
-		toCheckList.append(fourthMatrix)
-
-	print('alreadyCheckedList')
-	for cm in alreadyCheckedList:
-		print(Bcolors.GREEN + str(cm) + Bcolors.ENDC)
-
-	print('toCheckList')
-	for cm in toCheckList:
-		print(Bcolors.GREEN + str(cm.heuristicValue) + Bcolors.ENDC)
-
-	toCheckList.sort(key=getHeur)
-	print('sorted toCheckList')
-	for cm in toCheckList:
-		print(Bcolors.GREEN + str(cm.heuristicValue) + Bcolors.ENDC)
+	resolveLoop(0)
+	resolveLoop(1)

@@ -1,6 +1,9 @@
 from bcolors import *
 
 class PuzzleMatrix():
+	def checkIfDesired(self):
+		return self.currentMatrix == self.desiredMatrix
+
 	def changeTile(self, paramX, paramY, alreadyCheckedList):
 		done = False
 		i = 0
@@ -22,7 +25,7 @@ class PuzzleMatrix():
 			if self.currentMatrix == cl:
 				self.currentMatrix = None
 
-	def calculateManhattanScore(self, attemptNumber):
+	def calculateManhattanScore(self):
 		if self.currentMatrix == None:
 			return
 
@@ -62,12 +65,13 @@ class PuzzleMatrix():
 		# for array in self.precedentMatrix:
 		# 	print(Bcolors.GREEN + str(array) + Bcolors.ENDC)
 
-		print('attemptNumber ' + Bcolors.YELLOW + str(attemptNumber) + Bcolors.ENDC
+		print('attemptNumber ' + Bcolors.YELLOW + str(self.attemptNumber) + Bcolors.ENDC
 			+ ' + heuristicValue ' + Bcolors.YELLOW + str(self.heuristicValue) + Bcolors.ENDC
-			+ ' = score ' + Bcolors.GREEN + str(attemptNumber + self.heuristicValue) + Bcolors.ENDC)
+			+ ' = score ' + Bcolors.GREEN + str(self.attemptNumber + self.heuristicValue) + Bcolors.ENDC)
 
-	def __init__(self, length, currentMatrix, desiredMatrix):
+	def __init__(self, length, attemptNumber, currentMatrix, desiredMatrix):
 		self.length = length
+		self.attemptNumber = attemptNumber
 		self.currentMatrix = [ [ 0 for i in range(self.length) ] for j in range(self.length) ]
 		self.desiredMatrix = [ [ 0 for i in range(self.length) ] for j in range(self.length) ]
 		self.precedentMatrix = [ [ 0 for i in range(self.length) ] for j in range(self.length) ]
