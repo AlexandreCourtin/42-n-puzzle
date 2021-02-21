@@ -178,11 +178,16 @@ if __name__ == '__main__':
 			print(row)
 
 	def print_path_from(finalMatrix):
+		tab = []
 		previousMatrix = came_from[matrix_to_id(finalMatrix)]
 		while previousMatrix:
-			printMatrix(previousMatrix)
-			print(Bcolors.YELLOW + '================' + Bcolors.ENDC)
+			tab.append(previousMatrix)
 			previousMatrix = came_from[matrix_to_id(previousMatrix)]
+		tab = tab[::-1]
+		for t in tab:
+			printMatrix(t)
+			print(Bcolors.YELLOW + '================' + Bcolors.ENDC)
+		printMatrix(desiredMatrix)
 
 	matrix_queue = queue.Queue()
 	matrix_queue.put(startMatrix, 0)
