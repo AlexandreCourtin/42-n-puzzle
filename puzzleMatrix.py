@@ -30,6 +30,7 @@ class PuzzleMatrix():
 			return
 
 		self.heuristicValue = 0
+		self.scoreValue = 0
 
 		distanceMatrix = [ [ 0 for i in range(self.length) ] for j in range(self.length) ]
 		i = 0
@@ -52,6 +53,7 @@ class PuzzleMatrix():
 	
 				j += 1
 			i += 1
+		self.scoreValue = self.heuristicValue + self.attemptNumber
 
 		print('matrix is:')
 		for array in self.currentMatrix:
@@ -67,7 +69,7 @@ class PuzzleMatrix():
 
 		print('attemptNumber ' + Bcolors.YELLOW + str(self.attemptNumber) + Bcolors.ENDC
 			+ ' + heuristicValue ' + Bcolors.YELLOW + str(self.heuristicValue) + Bcolors.ENDC
-			+ ' = score ' + Bcolors.GREEN + str(self.attemptNumber + self.heuristicValue) + Bcolors.ENDC)
+			+ ' = score ' + Bcolors.GREEN + str(self.scoreValue) + Bcolors.ENDC)
 
 	def __init__(self, length, attemptNumber, currentMatrix, desiredMatrix):
 		self.length = length
@@ -76,6 +78,7 @@ class PuzzleMatrix():
 		self.desiredMatrix = [ [ 0 for i in range(self.length) ] for j in range(self.length) ]
 		self.precedentMatrix = [ [ 0 for i in range(self.length) ] for j in range(self.length) ]
 		self.heuristicValue = -1
+		self.scoreValue = -1
 
 		i = 0
 		while i < self.length:

@@ -15,19 +15,19 @@ def resolveLoop(attempt):
 
 	alreadyCheckedList.append(nextCheckedMatrix)
 
-	firstMatrix = PuzzleMatrix(length, attempt, puzzleMatrix, desiredMatrix)
+	firstMatrix = PuzzleMatrix(length, attempt, nextCheckedMatrix, desiredMatrix)
 	firstMatrix.changeTile(1, 0, alreadyCheckedList)
 	firstMatrix.calculateManhattanScore()
 
-	secondMatrix = PuzzleMatrix(length, attempt, puzzleMatrix, desiredMatrix)
+	secondMatrix = PuzzleMatrix(length, attempt, nextCheckedMatrix, desiredMatrix)
 	secondMatrix.changeTile(-1, 0, alreadyCheckedList)
 	secondMatrix.calculateManhattanScore()
 
-	thirdMatrix = PuzzleMatrix(length, attempt, puzzleMatrix, desiredMatrix)
+	thirdMatrix = PuzzleMatrix(length, attempt, nextCheckedMatrix, desiredMatrix)
 	thirdMatrix.changeTile(0, 1, alreadyCheckedList)
 	thirdMatrix.calculateManhattanScore()
 
-	fourthMatrix = PuzzleMatrix(length, attempt, puzzleMatrix, desiredMatrix)
+	fourthMatrix = PuzzleMatrix(length, attempt, nextCheckedMatrix, desiredMatrix)
 	fourthMatrix.changeTile(0, -1, alreadyCheckedList)
 	fourthMatrix.calculateManhattanScore()
 
@@ -52,17 +52,21 @@ def resolveLoop(attempt):
 	toCheckList.sort(key=getHeur)
 	print('sorted toCheckList')
 	for cm in toCheckList:
-		print(Bcolors.GREEN + str(cm.heuristicValue) + Bcolors.ENDC)
+		print(Bcolors.GREEN + str(cm.scoreValue) + Bcolors.ENDC)
 
+	futureAttempt = -2
 	if hasFinished == False:
 		i = 0
 		while i < length:
 			puzzleMatrix[i] = toCheckList[0].currentMatrix[i].copy()
 			i += 1
+		futureAttempt = toCheckList[0].attemptNumber
 		toCheckList.pop(0)
 
+	return futureAttempt + 1
+
 def getHeur(elem):
-	return elem.heuristicValue
+	return elem.scoreValue
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
@@ -174,5 +178,6 @@ if __name__ == '__main__':
 	alreadyCheckedList = []
 	toCheckList = []
 
-	resolveLoop(0)
-	resolveLoop(1)
+	okAttemptNumber = 0
+	while okAttemptNumber != -1:
+		okAttemptNumber = resolveLoop(okAttemptNumber)
