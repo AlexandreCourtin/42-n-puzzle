@@ -1,6 +1,7 @@
 import sys
 import argparse
-from queue import PriorityQueue
+import queue
+import time
 
 from bcolors import *
 # from puzzleMatrix import *
@@ -73,6 +74,8 @@ from bcolors import *
 # 	return elem.scoreValue
 
 if __name__ == '__main__':
+	start_time = time.time()
+
 	parser = argparse.ArgumentParser()
 
 	parser.add_argument('file', type=open, help='The puzzle to solve.')
@@ -253,8 +256,8 @@ if __name__ == '__main__':
 		for row in m:
 			print(row)
 
-	frontier = PriorityQueue()
-	frontier.put(startMatrix, 0)
+	matrix_queue = queue.Queue()
+	matrix_queue.put(startMatrix, 0)
 
 	id_to_matrix = dict()
 	came_from = dict()
@@ -263,31 +266,33 @@ if __name__ == '__main__':
 	came_from[matrix_to_id(startMatrix)] = None
 	cost_so_far[matrix_to_id(startMatrix)] = 0
 
-	i = 0
-	# while not frontier.empty():
-	while i < 2:
-		print('initial matrix')
-		currentMatrix = frontier.get()
-		printMatrix(currentMatrix)
-		print('===============')
+	print('initial matrix')
+	printMatrix(startMatrix)
+	while not matrix_queue.empty():
+		# print('initial matrix')
+		currentMatrix = matrix_queue.get()
+		# printMatrix(currentMatrix)
+		# print('===============')
 
 		if currentMatrix == desiredMatrix:
-			print('win!')
+			print('win! time = ' + str(time.time() - start_time))
+			printMatrix(currentMatrix)
 			break
 
 		for nextMatrix in neighbors(currentMatrix):
 			if nextMatrix != None:
 				currentId = matrix_to_id(currentMatrix)
 				nextId = matrix_to_id(nextMatrix)
-				printMatrix(nextMatrix)
+				# printMatrix(nextMatrix)
 				new_cost = cost_so_far[currentId] + 1
-				print(new_cost)
-				print(heuristic(nextMatrix))
-				print(currentId)
-				print(nextId)
+				next_matrix_heuristic = heuristic(nextMatrix)
+				# print(new_cost)
+				# print(next_matrix_heuristic)
+				# print(currentId)
+				# print(nextId)
 				if nextId not in cost_so_far or new_cost < cost_so_far[nextId]:
 					cost_so_far[nextId] = new_cost
-					print('score final: ' + str(new_cost + heuristic(nextMatrix)))
-					frontier.put(nextMatrix, new_cost + heuristic(nextMatrix))
+					new_cost_with_heuristic = new_cost + next_matrix_heuristic
+					# print('score final: ' + str(-new_cost_with_heuristic))
+					matrix_queue.put(nextMatrix, -new_cost_with_heuristic)
 					came_from[nextId] = currentMatrix
-		i += 1
