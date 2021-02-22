@@ -9,7 +9,6 @@ def generate_matrix(length, unsolvable):
 	check_length(length)
 
 	start_matrix = make_desired_matrix(length)
-	desired_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
 
 	precedent_direction = -1
 	for i in range(length * length * length * length):

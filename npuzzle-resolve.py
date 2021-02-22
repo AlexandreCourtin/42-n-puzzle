@@ -7,6 +7,7 @@ import random
 sys.path.append('./utils')
 
 from bcolors import *
+from file_reader import *
 from generator import *
 
 switcher_direction = {
@@ -44,7 +45,6 @@ if __name__ == '__main__':
 	length = 0
 	has_length = False
 	start_matrix = []
-	desired_matrix = []
 
 	if args.file:
 		print(Bcolors.YELLOW + '===== reading file =====' + Bcolors.ENDC)
@@ -61,7 +61,6 @@ if __name__ == '__main__':
 						check_length(length)
 						has_length = True
 						start_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
-						desired_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
 					else:
 						if row < length and column < length:
 							start_matrix[row][column] = int(char)
@@ -84,6 +83,8 @@ if __name__ == '__main__':
 	else:
 		print('args error')
 		sys.exit(1)
+
+	desired_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
 	print(Bcolors.YELLOW + '\n===== matrix summary =====' + Bcolors.ENDC)
 	print('length is {}'.format(Bcolors.GREEN + str(length) + Bcolors.ENDC))
 	print('matrix is:')
