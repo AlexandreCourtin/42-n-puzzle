@@ -6,31 +6,38 @@ import random
 
 from bcolors import *
 
+switcher_direction = {
+	0: [1, 0],
+	1: [-1, 0],
+	2: [0, 1],
+	3: [0, -1],
+}
+switcher_inverse = {
+	0: 1,
+	1: 0,
+	2: 3,
+	3: 2,
+}
+switcher_clockwise = {
+	'[1, 0]': [0, -1],
+	'[-1, 0]': [0, 1],
+	'[0, 1]': [1, 0],
+	'[0, -1]': [-1, 0],
+}
+
 def make_desired_matrix():
 		new_desired_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
-		directionX = 1
-		directionY = 0
+		d = switcher_direction.get(2)
 		x = 0
 		y = 0
 		for i in range((length * length) - 1):
 			new_desired_matrix[y][x] = i + 1
 
-			if y + directionY >= length or x + directionX >= length or new_desired_matrix[y + directionY][x + directionX] != 0:
-				if directionX == 1:
-					directionX = 0
-					directionY = 1
-				elif directionY == 1:
-					directionX = -1
-					directionY = 0
-				elif directionX == -1:
-					directionX = 0
-					directionY = -1
-				elif directionY == -1:
-					directionX = 1
-					directionY = 0
+			if y + d[0] >= length or x + d[1] >= length or new_desired_matrix[y + d[0]][x + d[1]]:
+				d = switcher_clockwise.get(str(d))
 
-			x += directionX
-			y += directionY
+			x += d[1]
+			y += d[0]
 		return new_desired_matrix
 
 def change_tile(current_matrix, paramX, paramY): # OPTI THIS
@@ -113,18 +120,6 @@ if __name__ == '__main__':
 		start_matrix = make_desired_matrix()
 		desired_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
 
-		switcher = {
-			0: [1, 0],
-			1: [-1, 0],
-			2: [0, 1],
-			3: [0, -1],
-		}
-		switcher_inverse = {
-			0: 1,
-			1: 0,
-			2: 3,
-			3: 2,
-		}
 		precedent_direction = -1
 		for i in range(length * length * length * length):
 			tmp = None
@@ -132,7 +127,7 @@ if __name__ == '__main__':
 				random_direction = switcher_inverse.get(precedent_direction)
 				while random_direction == switcher_inverse.get(precedent_direction):
 					random_direction = random.randint(0, 3)
-				direction = switcher.get(random_direction)
+				direction = switcher_direction.get(random_direction)
 				precedent_direction = random_direction
 				tmp = change_tile(start_matrix, direction[0], direction[1])
 			start_matrix = change_tile(start_matrix, direction[0], direction[1])
