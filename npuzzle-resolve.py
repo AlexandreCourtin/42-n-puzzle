@@ -26,19 +26,19 @@ switcher_clockwise = {
 }
 
 def make_desired_matrix():
-		new_desired_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
-		d = switcher_direction.get(2)
-		x = 0
-		y = 0
-		for i in range((length * length) - 1):
-			new_desired_matrix[y][x] = i + 1
+	new_desired_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
+	d = switcher_direction.get(2)
+	x = 0
+	y = 0
+	for i in range((length * length) - 1):
+		new_desired_matrix[y][x] = i + 1
 
-			if y + d[0] >= length or x + d[1] >= length or new_desired_matrix[y + d[0]][x + d[1]]:
-				d = switcher_clockwise.get(str(d))
+		if y + d[0] >= length or x + d[1] >= length or new_desired_matrix[y + d[0]][x + d[1]]:
+			d = switcher_clockwise.get(str(d))
 
-			x += d[1]
-			y += d[0]
-		return new_desired_matrix
+		x += d[1]
+		y += d[0]
+	return new_desired_matrix
 
 def change_tile(current_matrix, paramX, paramY): # OPTI THIS
 	result_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
@@ -201,12 +201,11 @@ if __name__ == '__main__':
 
 	def neighbors(current_matrix): # OPTI THIS
 		neighbors_list = [[], [], [], []]
-		neighbors_list[0] = change_tile(current_matrix, 1, 0)
-		neighbors_list[1] = change_tile(current_matrix, -1, 0)
-		neighbors_list[2] = change_tile(current_matrix, 0, 1)
-		neighbors_list[3] = change_tile(current_matrix, 0, -1)
+		for d in range(4):
+			current_direction = switcher_direction.get(d)
+			neighbors_list[d] = change_tile(current_matrix, current_direction[1], current_direction[0])
 		return neighbors_list
-	
+
 	def print_matrix(m):
 		for row in m:
 			print(row)
