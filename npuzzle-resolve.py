@@ -68,6 +68,7 @@ if __name__ == '__main__':
 
 	parser.add_argument('-f', '--file', type=open, help='File containing the puzzle to solve.')
 	parser.add_argument('-g', '--generate', type=int, help='Generate matrix of choosen length.')
+	parser.add_argument('-u', '--unsolvable', action="store_true", default=False, help='Used with -g: Make the generated matrix unsolvable')
 	# parser.add_argument('-f', '--function', type=str, default='manhattan-distance', help='Choose heuristic function between: manhattan-distance')
 
 	args = parser.parse_args()
@@ -115,6 +116,7 @@ if __name__ == '__main__':
 		print(Bcolors.YELLOW + '===== generate random matrix =====' + Bcolors.ENDC)
 
 		length = args.generate
+		unsolvable = args.unsolvable
 		check_length()
 
 		start_matrix = make_desired_matrix()
@@ -145,6 +147,10 @@ if __name__ == '__main__':
 				tmp = change_tile(start_matrix, direction[0], direction[1])
 			start_matrix = change_tile(start_matrix, direction[0], direction[1])
 			i += 1
+		print(Bcolors.GREEN + 'generated !' + Bcolors.ENDC)
+
+		if unsolvable:
+			print(Bcolors.RED + 'unsolvable !' + Bcolors.ENDC)
 	else:
 		print('args error')
 		sys.exit(1)
