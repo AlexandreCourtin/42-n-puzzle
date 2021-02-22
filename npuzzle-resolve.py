@@ -35,7 +35,7 @@ def make_desired_matrix():
 			y += directionY
 		return new_desired_matrix
 
-def change_tile(current_matrix, paramX, paramY):
+def change_tile(current_matrix, paramX, paramY): # OPTI THIS
 	result_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
 	i = 0
 	while i < length:
@@ -201,7 +201,7 @@ if __name__ == '__main__':
 				result += str(char)
 		return result
 
-	def heuristic(next_matrix):
+	def heuristic(next_matrix): # OPTI THIS
 		heuristic_value = 0
 		i = 0
 		while i < length:
@@ -223,7 +223,7 @@ if __name__ == '__main__':
 			i += 1
 		return heuristic_value
 
-	def neighbors(current_matrix):
+	def neighbors(current_matrix): # OPTI THIS
 		neighbors_list = [[], [], [], []]
 		neighbors_list[0] = change_tile(current_matrix, 1, 0)
 		neighbors_list[1] = change_tile(current_matrix, -1, 0)
