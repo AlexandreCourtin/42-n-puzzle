@@ -2,7 +2,6 @@ import sys
 import argparse
 import queue
 import time
-import random
 
 sys.path.append('./utils')
 
@@ -39,43 +38,12 @@ if __name__ == '__main__':
 
 	args = parser.parse_args()
 
-	line_count = 0
-	row = 0
-	column = 0
 	length = 0
-	has_length = False
 	start_matrix = []
 
 	if args.file:
-		print(Bcolors.YELLOW + '===== reading file =====' + Bcolors.ENDC)
-
-		while True:
-			print('line {}:'.format(line_count))
-			line = args.file.readline().split()
-	
-			for char in line:
-				if char.isnumeric():
-					print(char, end = '|')
-					if not has_length:
-						length = int(char)
-						check_length(length)
-						has_length = True
-						start_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
-					else:
-						if row < length and column < length:
-							start_matrix[row][column] = int(char)
-							column += 1
-							if column >= length:
-								column = 0
-								row += 1
-				else:
-					break
-			print('')
-
-			if not line:
-				break
-
-			line_count += 1
+		start_matrix = read_file_matrix(args.file)
+		length = len(start_matrix[0])
 	elif args.generate:
 		length = args.generate
 		unsolvable = args.unsolvable
