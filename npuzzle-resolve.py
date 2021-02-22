@@ -6,6 +6,58 @@ import random
 
 from bcolors import *
 
+def make_desired_matrix():
+		new_desired_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
+		directionX = 1
+		directionY = 0
+		x = 0
+		y = 0
+		i = 1
+		while i < length * length:
+			new_desired_matrix[y][x] = i
+			i += 1
+
+			if y + directionY >= length or x + directionX >= length or new_desired_matrix[y + directionY][x + directionX] != 0:
+				if directionX == 1:
+					directionX = 0
+					directionY = 1
+				elif directionY == 1:
+					directionX = -1
+					directionY = 0
+				elif directionX == -1:
+					directionX = 0
+					directionY = -1
+				elif directionY == -1:
+					directionX = 1
+					directionY = 0
+
+			x += directionX
+			y += directionY
+		return new_desired_matrix
+
+def change_tile(current_matrix, paramX, paramY):
+	result_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
+	i = 0
+	while i < length:
+		result_matrix[i] = current_matrix[i].copy()
+		i += 1
+
+	done = False
+	i = 0
+	while i < length and not done:
+		j = 0
+		while j < length and not done:
+			if result_matrix[i][j] == 0:
+				if j + paramX < length and i + paramY < length and j + paramX >= 0 and i + paramY >= 0:
+					result_matrix[i][j] = result_matrix[i + paramY][j + paramX]
+					result_matrix[i + paramY][j + paramX] = 0
+				else:
+					result_matrix = None
+				done = True
+			j += 1
+		i += 1
+	return result_matrix
+
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
 
@@ -58,17 +110,34 @@ if __name__ == '__main__':
 
 		length = args.generate
 
-		start_matrix = [ [ -1 for i in range(length) ] for j in range(length) ]
+		start_matrix = make_desired_matrix()
 		desired_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
-		r = 0
-		while r < length * length:
-			i = random.randint(0, length - 1)
-			j = random.randint(0, length - 1)
-			while start_matrix[i][j] != -1:
-				i = random.randint(0, length - 1)
-				j = random.randint(0, length - 1)
-			start_matrix[i][j] = r
-			r += 1
+
+		switcher = {
+			0: [1, 0],
+			1: [-1, 0],
+			2: [0, 1],
+			3: [0, -1],
+		}
+		switcher_inverse = {
+			0: 1,
+			1: 0,
+			2: 3,
+			3: 2,
+		}
+		precedent_direction = -1
+		i = 0
+		while i < length * length * length * length:
+			tmp = None
+			while not tmp:
+				random_direction = switcher_inverse.get(precedent_direction)
+				while random_direction == switcher_inverse.get(precedent_direction):
+					random_direction = random.randint(0, 3)
+				direction = switcher.get(random_direction)
+				precedent_direction = random_direction
+				tmp = change_tile(start_matrix, direction[0], direction[1])
+			start_matrix = change_tile(start_matrix, direction[0], direction[1])
+			i += 1
 
 	else:
 		print('args error')
@@ -98,31 +167,7 @@ if __name__ == '__main__':
 		print(Bcolors.GREEN + 'all good' + Bcolors.ENDC)
 
 	print(Bcolors.YELLOW + '\n===== making desired matrix =====' + Bcolors.ENDC)
-	directionX = 1
-	directionY = 0
-	x = 0
-	y = 0
-	i = 1
-	while i < length * length:
-		desired_matrix[y][x] = i
-		i += 1
-
-		if y + directionY >= length or x + directionX >= length or desired_matrix[y + directionY][x + directionX] != 0:
-			if directionX == 1:
-				directionX = 0
-				directionY = 1
-			elif directionY == 1:
-				directionX = -1
-				directionY = 0
-			elif directionX == -1:
-				directionX = 0
-				directionY = -1
-			elif directionY == -1:
-				directionX = 1
-				directionY = 0
-
-		x += directionX
-		y += directionY
+	desired_matrix = make_desired_matrix()
 
 	print('desired matrix is:')
 	for array in desired_matrix:
@@ -159,29 +204,6 @@ if __name__ == '__main__':
 				j += 1
 			i += 1
 		return heuristic_value
-
-	def change_tile(current_matrix, paramX, paramY):
-		result_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
-		i = 0
-		while i < length:
-			result_matrix[i] = current_matrix[i].copy()
-			i += 1
-
-		done = False
-		i = 0
-		while i < length and not done:
-			j = 0
-			while j < length and not done:
-				if result_matrix[i][j] == 0:
-					if j + paramX < length and i + paramY < length and j + paramX >= 0 and i + paramY >= 0:
-						result_matrix[i][j] = result_matrix[i + paramY][j + paramX]
-						result_matrix[i + paramY][j + paramX] = 0
-					else:
-						result_matrix = None
-					done = True
-				j += 1
-			i += 1
-		return result_matrix
 
 	def neighbors(current_matrix):
 		neighbors_list = [[], [], [], []]
