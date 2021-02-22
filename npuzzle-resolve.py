@@ -150,7 +150,13 @@ if __name__ == '__main__':
 		print(Bcolors.GREEN + 'generated !' + Bcolors.ENDC)
 
 		if unsolvable:
+			if start_matrix[0][0] == 0 or start_matrix[0][1] == 0:
+				start_matrix[length - 1][length - 1], start_matrix[length - 1][length - 2] = start_matrix[length - 1][length - 2], start_matrix[length - 1][length - 1]
+			else:
+				start_matrix[0][0], start_matrix[0][1] = start_matrix[0][1], start_matrix[0][0]
 			print(Bcolors.RED + 'unsolvable !' + Bcolors.ENDC)
+		else:
+			print(Bcolors.GREEN + 'solvable !' + Bcolors.ENDC)
 	else:
 		print('args error')
 		sys.exit(1)
