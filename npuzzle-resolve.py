@@ -12,10 +12,8 @@ def make_desired_matrix():
 		directionY = 0
 		x = 0
 		y = 0
-		i = 1
-		while i < length * length:
-			new_desired_matrix[y][x] = i
-			i += 1
+		for i in range((length * length) - 1):
+			new_desired_matrix[y][x] = i + 1
 
 			if y + directionY >= length or x + directionX >= length or new_desired_matrix[y + directionY][x + directionX] != 0:
 				if directionX == 1:
@@ -37,25 +35,18 @@ def make_desired_matrix():
 
 def change_tile(current_matrix, paramX, paramY): # OPTI THIS
 	result_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
-	i = 0
-	while i < length:
+	for i in range(length):
 		result_matrix[i] = current_matrix[i].copy()
-		i += 1
 
-	done = False
-	i = 0
-	while i < length and not done:
-		j = 0
-		while j < length and not done:
+	for i in range(length):
+		for j in range(length):
 			if result_matrix[i][j] == 0:
 				if j + paramX < length and i + paramY < length and j + paramX >= 0 and i + paramY >= 0:
 					result_matrix[i][j] = result_matrix[i + paramY][j + paramX]
 					result_matrix[i + paramY][j + paramX] = 0
 				else:
 					result_matrix = None
-				done = True
-			j += 1
-		i += 1
+				return result_matrix
 	return result_matrix
 
 def check_length():
@@ -135,8 +126,7 @@ if __name__ == '__main__':
 			3: 2,
 		}
 		precedent_direction = -1
-		i = 0
-		while i < length * length * length * length:
+		for i in range(length * length * length * length):
 			tmp = None
 			while not tmp:
 				random_direction = switcher_inverse.get(precedent_direction)
@@ -146,7 +136,6 @@ if __name__ == '__main__':
 				precedent_direction = random_direction
 				tmp = change_tile(start_matrix, direction[0], direction[1])
 			start_matrix = change_tile(start_matrix, direction[0], direction[1])
-			i += 1
 		print(Bcolors.GREEN + 'generated !' + Bcolors.ENDC)
 
 		if unsolvable:
@@ -203,24 +192,16 @@ if __name__ == '__main__':
 
 	def heuristic(next_matrix): # OPTI THIS
 		heuristic_value = 0
-		i = 0
-		while i < length:
-			j = 0
-			while j < length:
+		for i in range(length):
+			for j in range(length):
 				next_matrix_value = next_matrix[i][j]
 				if next_matrix_value != 0:
-					ii = 0
-					while ii < length:
-						jj = 0
-						while jj < length:
+					for ii in range(length):
+						for jj in range(length):
 							desiredNumber = desired_matrix[ii][jj]
 							if desiredNumber == next_matrix_value:
 								heuristic_value += abs(i - ii) + abs(j - jj)
-							jj += 1
-						ii += 1
 
-				j += 1
-			i += 1
 		return heuristic_value
 
 	def neighbors(current_matrix): # OPTI THIS
