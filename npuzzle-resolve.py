@@ -4,6 +4,8 @@ import queue
 import time
 import random
 
+sys.path.append('./utils')
+
 from bcolors import *
 
 switcher_direction = {
@@ -146,7 +148,6 @@ if __name__ == '__main__':
 		sys.exit(1)
 
 	print(Bcolors.YELLOW + '\n===== matrix summary =====' + Bcolors.ENDC)
-	# print('heuristic function is {}'.format(Bcolors.GREEN + args.function + Bcolors.ENDC))
 	print('length is {}'.format(Bcolors.GREEN + str(length) + Bcolors.ENDC))
 	print('matrix is:')
 	for array in start_matrix:
