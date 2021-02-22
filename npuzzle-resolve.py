@@ -7,6 +7,7 @@ import random
 sys.path.append('./utils')
 
 from bcolors import *
+from generator import *
 
 switcher_direction = {
 	0: [1, 0],
@@ -26,42 +27,6 @@ switcher_clockwise = {
 	'[0, 1]': [1, 0],
 	'[0, -1]': [-1, 0],
 }
-
-def make_desired_matrix():
-	new_desired_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
-	d = switcher_direction.get(2)
-	x = 0
-	y = 0
-	for i in range((length * length) - 1):
-		new_desired_matrix[y][x] = i + 1
-
-		if y + d[0] >= length or x + d[1] >= length or new_desired_matrix[y + d[0]][x + d[1]]:
-			d = switcher_clockwise.get(str(d))
-
-		x += d[1]
-		y += d[0]
-	return new_desired_matrix
-
-def change_tile(current_matrix, paramX, paramY): # OPTI THIS
-	result_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
-	for i in range(length):
-		result_matrix[i] = current_matrix[i].copy()
-
-	for i in range(length):
-		for j in range(length):
-			if result_matrix[i][j] == 0:
-				if j + paramX < length and i + paramY < length and j + paramX >= 0 and i + paramY >= 0:
-					result_matrix[i][j] = result_matrix[i + paramY][j + paramX]
-					result_matrix[i + paramY][j + paramX] = 0
-				else:
-					result_matrix = None
-				return result_matrix
-	return result_matrix
-
-def check_length():
-	if length < 2:
-			print('size of matrix needs to be greater than 1')
-			sys.exit(1)
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
@@ -93,7 +58,7 @@ if __name__ == '__main__':
 					print(char, end = '|')
 					if not has_length:
 						length = int(char)
-						check_length()
+						check_length(length)
 						has_length = True
 						start_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
 						desired_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
@@ -113,40 +78,12 @@ if __name__ == '__main__':
 
 			line_count += 1
 	elif args.generate:
-		print(Bcolors.YELLOW + '===== generate random matrix =====' + Bcolors.ENDC)
-
 		length = args.generate
 		unsolvable = args.unsolvable
-		check_length()
-
-		start_matrix = make_desired_matrix()
-		desired_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
-
-		precedent_direction = -1
-		for i in range(length * length * length * length):
-			tmp = None
-			while not tmp:
-				random_direction = switcher_inverse.get(precedent_direction)
-				while random_direction == switcher_inverse.get(precedent_direction):
-					random_direction = random.randint(0, 3)
-				direction = switcher_direction.get(random_direction)
-				precedent_direction = random_direction
-				tmp = change_tile(start_matrix, direction[0], direction[1])
-			start_matrix = change_tile(start_matrix, direction[0], direction[1])
-		print(Bcolors.GREEN + 'generated !' + Bcolors.ENDC)
-
-		if unsolvable:
-			if start_matrix[0][0] == 0 or start_matrix[0][1] == 0:
-				start_matrix[length - 1][length - 1], start_matrix[length - 1][length - 2] = start_matrix[length - 1][length - 2], start_matrix[length - 1][length - 1]
-			else:
-				start_matrix[0][0], start_matrix[0][1] = start_matrix[0][1], start_matrix[0][0]
-			print(Bcolors.RED + 'unsolvable !' + Bcolors.ENDC)
-		else:
-			print(Bcolors.GREEN + 'solvable !' + Bcolors.ENDC)
+		start_matrix = generate_matrix(length, unsolvable)
 	else:
 		print('args error')
 		sys.exit(1)
-
 	print(Bcolors.YELLOW + '\n===== matrix summary =====' + Bcolors.ENDC)
 	print('length is {}'.format(Bcolors.GREEN + str(length) + Bcolors.ENDC))
 	print('matrix is:')
@@ -170,7 +107,7 @@ if __name__ == '__main__':
 		print(Bcolors.GREEN + 'all good' + Bcolors.ENDC)
 
 	print(Bcolors.YELLOW + '\n===== making desired matrix =====' + Bcolors.ENDC)
-	desired_matrix = make_desired_matrix()
+	desired_matrix = make_desired_matrix(length)
 
 	print('desired matrix is:')
 	for array in desired_matrix:
@@ -204,7 +141,7 @@ if __name__ == '__main__':
 		neighbors_list = [[], [], [], []]
 		for d in range(4):
 			current_direction = switcher_direction.get(d)
-			neighbors_list[d] = change_tile(current_matrix, current_direction[1], current_direction[0])
+			neighbors_list[d] = change_tile(current_matrix, length, current_direction[1], current_direction[0])
 		return neighbors_list
 
 	def print_matrix(m):
