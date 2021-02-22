@@ -58,6 +58,11 @@ def change_tile(current_matrix, paramX, paramY):
 		i += 1
 	return result_matrix
 
+def check_length():
+	if length < 2:
+			print('size of matrix needs to be greater than 1')
+			sys.exit(1)
+
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
 
@@ -87,6 +92,7 @@ if __name__ == '__main__':
 					print(char, end = '|')
 					if not has_length:
 						length = int(char)
+						check_length()
 						has_length = True
 						start_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
 						desired_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
@@ -109,6 +115,7 @@ if __name__ == '__main__':
 		print(Bcolors.YELLOW + '===== generate random matrix =====' + Bcolors.ENDC)
 
 		length = args.generate
+		check_length()
 
 		start_matrix = make_desired_matrix()
 		desired_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
@@ -138,7 +145,6 @@ if __name__ == '__main__':
 				tmp = change_tile(start_matrix, direction[0], direction[1])
 			start_matrix = change_tile(start_matrix, direction[0], direction[1])
 			i += 1
-
 	else:
 		print('args error')
 		sys.exit(1)
@@ -236,10 +242,8 @@ if __name__ == '__main__':
 	maximum_state_count = 1
 	current_state_count = 1
 
-	# id_to_matrix = dict()
 	came_from = dict()
 	cost_so_far = dict()
-	# id_to_matrix[matrix_to_id(start_matrix)] = start_matrix
 	came_from[matrix_to_id(start_matrix)] = None
 	cost_so_far[matrix_to_id(start_matrix)] = 0
 
@@ -268,7 +272,6 @@ if __name__ == '__main__':
 					new_cost_with_heuristic = new_cost + next_matrix_heuristic
 					matrix_queue.put(next_matrix, -new_cost_with_heuristic)
 					came_from[next_id] = current_matrix
-					# id_to_matrix[next_id] = next_matrix
 					current_state_count += 1
 					if maximum_state_count < current_state_count:
 						maximum_state_count = current_state_count
