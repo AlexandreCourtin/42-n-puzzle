@@ -1,3 +1,4 @@
+import sys
 import queue
 import time
 
@@ -44,12 +45,12 @@ def resolve_npuzzle(start_matrix, desired_matrix, length):
 		current_state_count -= 1
 
 		if current_matrix == desired_matrix:
-			print(Bcolors.GREEN + 'win!' + Bcolors.ENDC)
+			print(Bcolors.GREEN + 'win !' + Bcolors.ENDC)
 			print_path_from(current_matrix, came_from, desired_matrix)
 			print('time = ' + Bcolors.GREEN + str(time.time() - start_time) + Bcolors.ENDC)
 			print('selected opened state count = ' + Bcolors.GREEN + str(selected_opened_state_count) + Bcolors.ENDC)
 			print('maximum state count in memory = ' + Bcolors.GREEN + str(maximum_state_count) + Bcolors.ENDC)
-			break
+			sys.exit(0)
 
 		for next_matrix in neighbors(current_matrix, length):
 			if next_matrix != None:
@@ -65,3 +66,4 @@ def resolve_npuzzle(start_matrix, desired_matrix, length):
 					current_state_count += 1
 					if maximum_state_count < current_state_count:
 						maximum_state_count = current_state_count
+	print('This npuzzle is ' + Bcolors.RED + 'unsolvable !' + Bcolors.ENDC)
