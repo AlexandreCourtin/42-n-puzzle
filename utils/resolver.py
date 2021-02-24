@@ -25,7 +25,7 @@ def neighbors(current_matrix, length): # OPTI THIS
 		neighbors_list[d] = change_tile(current_matrix, length, current_direction[1], current_direction[0])
 	return neighbors_list
 
-def resolve_npuzzle(start_matrix, desired_matrix, length):
+def resolve_npuzzle(start_matrix, desired_matrix, start_time, length):
 	matrix_queue = queue.Queue()
 	matrix_queue.put(start_matrix, 0)
 
@@ -38,7 +38,6 @@ def resolve_npuzzle(start_matrix, desired_matrix, length):
 	came_from[matrix_to_id(start_matrix)] = None
 	cost_so_far[matrix_to_id(start_matrix)] = 0
 
-	start_time = time.time()
 	while not matrix_queue.empty():
 		current_matrix = matrix_queue.get()
 		selected_opened_state_count += 1

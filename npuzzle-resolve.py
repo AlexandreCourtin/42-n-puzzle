@@ -1,5 +1,6 @@
 import sys
 import argparse
+import time
 
 sys.path.append('./utils')
 
@@ -9,6 +10,8 @@ from verificator import *
 from resolver import *
 
 if __name__ == '__main__':
+	start_time = time.time()
+
 	parser = argparse.ArgumentParser()
 
 	parser.add_argument('-f', '--file', type=open, help='File containing the puzzle to solve.')
@@ -51,4 +54,4 @@ if __name__ == '__main__':
 
 	print(Bcolors.YELLOW + '\n===== resolving n-puzzle with '
 		+ Bcolors.GREEN + 'manhattan-distance' + Bcolors.YELLOW + ' heuristic function =====' + Bcolors.ENDC)
-	resolve_npuzzle(start_matrix, desired_matrix, length)
+	resolve_npuzzle(start_matrix, desired_matrix, start_time, length)
