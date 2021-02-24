@@ -21,7 +21,7 @@ def read_file_matrix(file):
 					length = int(char)
 					check_length(length)
 					has_length = True
-					start_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
+					start_matrix = [ [ -1 for i in range(length) ] for j in range(length) ]
 				else:
 					if row < length and column < length:
 						start_matrix[row][column] = int(char)
