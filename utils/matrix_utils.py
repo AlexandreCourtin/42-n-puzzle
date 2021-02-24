@@ -68,8 +68,7 @@ def print_path_from(finalMatrix, came_from, desired_matrix):
 	while previous_matrix:
 		tab.append(previous_matrix)
 		previous_matrix = came_from[matrix_to_id(previous_matrix)]
-	tab = tab[::-1]
-	for t in tab:
+	for t in tab[::-1]:
 		print_matrix(t)
 		print(Bcolors.YELLOW + '================' + Bcolors.ENDC)
 	print_matrix(desired_matrix)
