@@ -22,7 +22,7 @@ if __name__ == '__main__':
 	try:
 		args = parser.parse_args()
 	except:
-		print('file not found')
+		print('args error')
 		sys.exit(1)
 
 	length = 0

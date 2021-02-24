@@ -40,14 +40,14 @@ def misplaced_heuristic(next_matrix, desired_matrix, length): # OPTI THIS
 				heuristic_value += 1
 	return heuristic_value
 
-def neighbors(current_matrix, length): # OPTI THIS
+def neighbors(current_matrix, cost_so_far, length): # OPTI THIS
 	neighbors_list = [[], [], [], []]
 	for d in range(4):
 		current_direction = switcher_direction.get(d)
-		neighbors_list[d] = change_tile(current_matrix, length, current_direction[1], current_direction[0])
+		neighbors_list[d] = change_tile(current_matrix, length, current_direction[1], current_direction[0], cost_so_far)
 	return neighbors_list
 
-def resolve_npuzzle(start_matrix, desired_matrix, start_time, length, heuristic_type):
+def resolve_npuzzle(start_matrix, desired_matrix, start_time, length, heuristic_type): # OPTI THIS
 	matrix_queue = queue.Queue()
 	matrix_queue.put(start_matrix, 0)
 
@@ -73,7 +73,7 @@ def resolve_npuzzle(start_matrix, desired_matrix, start_time, length, heuristic_
 			print('maximum state count in memory = ' + Bcolors.GREEN + str(maximum_state_count) + Bcolors.ENDC)
 			sys.exit(0)
 
-		for next_matrix in neighbors(current_matrix, length):
+		for next_matrix in neighbors(current_matrix, cost_so_far, length):
 			if next_matrix != None:
 				current_id = matrix_to_id(current_matrix)
 				next_id = matrix_to_id(next_matrix)
@@ -86,14 +86,13 @@ def resolve_npuzzle(start_matrix, desired_matrix, start_time, length, heuristic_
 				else:
 					next_matrix_heuristic = manhattan_heuristic(next_matrix, desired_matrix, length)
 
-				if next_id not in cost_so_far or new_cost < cost_so_far[next_id]:
-					cost_so_far[next_id] = new_cost
-					new_cost_with_heuristic = new_cost + next_matrix_heuristic
-					matrix_queue.put(next_matrix, -new_cost_with_heuristic)
-					came_from[next_id] = current_matrix
-					current_state_count += 1
+				cost_so_far[next_id] = new_cost
+				new_cost_with_heuristic = new_cost + next_matrix_heuristic
+				matrix_queue.put(next_matrix, -new_cost_with_heuristic)
+				came_from[next_id] = current_matrix
+				current_state_count += 1
 
-					if maximum_state_count < current_state_count:
-						maximum_state_count = current_state_count
+				if maximum_state_count < current_state_count:
+					maximum_state_count = current_state_count
 
 	print('This npuzzle is ' + Bcolors.RED + 'unsolvable !' + Bcolors.ENDC)

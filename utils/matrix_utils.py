@@ -6,20 +6,34 @@ def check_length(length):
 		print('size of matrix needs to be greater than 1')
 		sys.exit(1)
 
-def change_tile(current_matrix, length, paramX, paramY):
-	result_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
-	for i in range(length):
-		result_matrix[i] = current_matrix[i].copy()
+def change_tile(current_matrix, length, paramX, paramY, cost_so_far): # OPTI THIS
+	result_matrix = [ [ -1 for i in range(length) ] for j in range(length) ]
 
+	changedTile = False
+	savedX = -1
+	savedY = -1
 	for i in range(length):
 		for j in range(length):
-			if result_matrix[i][j] == 0:
-				if j + paramX < length and i + paramY < length and j + paramX >= 0 and i + paramY >= 0:
-					result_matrix[i][j] = result_matrix[i + paramY][j + paramX]
-					result_matrix[i + paramY][j + paramX] = 0
+			if current_matrix[i][j] == 0 and not changedTile:
+				if paramX != 0 and j + paramX < length and j + paramX >= 0:
+					result_matrix[i][j] = current_matrix[i][j + paramX]
+					result_matrix[i][j + paramX] = 0
+					savedX = j + paramX
+					savedY = i
+					changedTile = True
+				elif paramY != 0 and i + paramY < length and i + paramY >= 0:
+					result_matrix[i][j] = current_matrix[i + paramY][j]
+					result_matrix[i + paramY][j] = 0
+					savedX = j
+					savedY = i + paramY
+					changedTile = True
 				else:
-					result_matrix = None
-				return result_matrix
+					return None
+			elif i != savedY or j != savedX:
+				result_matrix[i][j] = current_matrix[i][j]
+
+	if matrix_to_id(result_matrix) in cost_so_far:
+		return None
 	return result_matrix
 
 def make_desired_matrix(length):
