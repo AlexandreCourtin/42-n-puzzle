@@ -5,7 +5,6 @@ import time
 
 sys.path.append('./utils')
 
-from bcolors import *
 from file_reader import *
 from generator import *
 
@@ -85,13 +84,6 @@ if __name__ == '__main__':
 	print(Bcolors.YELLOW + '\n===== resolving n-puzzle with '
 		+ Bcolors.GREEN + 'manhattan-distance' + Bcolors.YELLOW + ' heuristic function =====' + Bcolors.ENDC)
 
-	def matrix_to_id(matrix):
-		result = ''
-		for row in matrix:
-			for char in row:
-				result += str(char)
-		return result
-
 	def heuristic(next_matrix): # OPTI THIS
 		heuristic_value = 0
 		for i in range(length):
@@ -113,22 +105,6 @@ if __name__ == '__main__':
 			neighbors_list[d] = change_tile(current_matrix, length, current_direction[1], current_direction[0])
 		return neighbors_list
 
-	def print_matrix(m):
-		for row in m:
-			print(row)
-
-	def print_path_from(finalMatrix):
-		tab = []
-		previous_matrix = came_from[matrix_to_id(finalMatrix)]
-		while previous_matrix:
-			tab.append(previous_matrix)
-			previous_matrix = came_from[matrix_to_id(previous_matrix)]
-		tab = tab[::-1]
-		for t in tab:
-			print_matrix(t)
-			print(Bcolors.YELLOW + '================' + Bcolors.ENDC)
-		print_matrix(desired_matrix)
-
 	matrix_queue = queue.Queue()
 	matrix_queue.put(start_matrix, 0)
 
@@ -149,7 +125,7 @@ if __name__ == '__main__':
 
 		if current_matrix == desired_matrix:
 			print(Bcolors.GREEN + 'win!' + Bcolors.ENDC)
-			print_path_from(current_matrix)
+			print_path_from(current_matrix, came_from, desired_matrix)
 			print('time = ' + Bcolors.GREEN + str(time.time() - start_time) + Bcolors.ENDC)
 			print('selected opened state count = ' + Bcolors.GREEN + str(selected_opened_state_count) + Bcolors.ENDC)
 			print('maximum state count in memory = ' + Bcolors.GREEN + str(maximum_state_count) + Bcolors.ENDC)

@@ -1,4 +1,5 @@
 from switchers import *
+from bcolors import *
 
 def check_length(length):
 	if length < 2:
@@ -35,3 +36,26 @@ def make_desired_matrix(length):
 		x += d[1]
 		y += d[0]
 	return new_desired_matrix
+
+def print_matrix(m):
+	for row in m:
+		print(row)
+
+def matrix_to_id(matrix):
+	result = ''
+	for row in matrix:
+		for char in row:
+			result += str(char)
+	return result
+
+def print_path_from(finalMatrix, came_from, desired_matrix):
+	tab = []
+	previous_matrix = came_from[matrix_to_id(finalMatrix)]
+	while previous_matrix:
+		tab.append(previous_matrix)
+		previous_matrix = came_from[matrix_to_id(previous_matrix)]
+	tab = tab[::-1]
+	for t in tab:
+		print_matrix(t)
+		print(Bcolors.YELLOW + '================' + Bcolors.ENDC)
+	print_matrix(desired_matrix)
