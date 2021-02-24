@@ -4,7 +4,7 @@ import time
 
 from matrix_utils import *
 
-def heuristic(next_matrix, desired_matrix, length): # OPTI THIS
+def manhattan_heuristic(next_matrix, desired_matrix, length): # OPTI THIS
 	heuristic_value = 0
 	for i in range(length):
 		for j in range(length):
@@ -25,7 +25,7 @@ def neighbors(current_matrix, length): # OPTI THIS
 		neighbors_list[d] = change_tile(current_matrix, length, current_direction[1], current_direction[0])
 	return neighbors_list
 
-def resolve_npuzzle(start_matrix, desired_matrix, start_time, length):
+def resolve_npuzzle(start_matrix, desired_matrix, start_time, length, heuristic_type):
 	matrix_queue = queue.Queue()
 	matrix_queue.put(start_matrix, 0)
 
@@ -56,7 +56,13 @@ def resolve_npuzzle(start_matrix, desired_matrix, start_time, length):
 				current_id = matrix_to_id(current_matrix)
 				next_id = matrix_to_id(next_matrix)
 				new_cost = cost_so_far[current_id] + 1
-				next_matrix_heuristic = heuristic(next_matrix, desired_matrix, length)
+
+				if heuristic_type == 'euclidean':
+					print('eucl')
+				elif heuristic_type == 'out-of-place':
+					print('oop')
+				else:
+					next_matrix_heuristic = manhattan_heuristic(next_matrix, desired_matrix, length)
 				if next_id not in cost_so_far or new_cost < cost_so_far[next_id]:
 					cost_so_far[next_id] = new_cost
 					new_cost_with_heuristic = new_cost + next_matrix_heuristic
