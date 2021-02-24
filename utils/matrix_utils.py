@@ -32,7 +32,7 @@ def change_tile(current_matrix, length, paramX, paramY, cost_so_far): # OPTI THI
 			elif i != savedY or j != savedX:
 				result_matrix[i][j] = current_matrix[i][j]
 
-	if matrix_to_id(result_matrix) in cost_so_far:
+	if cost_so_far and matrix_to_id(result_matrix) in cost_so_far:
 		return None
 	return result_matrix
 

@@ -19,8 +19,8 @@ def generate_matrix(length, unsolvable):
 				random_direction = random.randint(0, 3)
 			direction = switcher_direction.get(random_direction)
 			precedent_direction = random_direction
-			tmp = change_tile(start_matrix, length, direction[0], direction[1])
-		start_matrix = change_tile(start_matrix, length, direction[0], direction[1])
+			tmp = change_tile(start_matrix, length, direction[0], direction[1], None)
+		start_matrix = change_tile(start_matrix, length, direction[0], direction[1], None)
 	print(Bcolors.GREEN + 'generated !' + Bcolors.ENDC)
 
 	if unsolvable:
