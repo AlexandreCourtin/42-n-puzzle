@@ -1,6 +1,7 @@
 import sys
 import queue
 import time
+import math
 
 from matrix_utils import *
 
@@ -15,7 +16,28 @@ def manhattan_heuristic(next_matrix, desired_matrix, length): # OPTI THIS
 						desiredNumber = desired_matrix[ii][jj]
 						if desiredNumber == next_matrix_value:
 							heuristic_value += abs(i - ii) + abs(j - jj)
+	return heuristic_value
 
+def euclidean_heuristic(next_matrix, desired_matrix, length): # OPTI THIS
+	heuristic_value = 0
+	for i in range(length):
+		for j in range(length):
+			next_matrix_value = next_matrix[i][j]
+			if next_matrix_value != 0:
+				for ii in range(length):
+					for jj in range(length):
+						desiredNumber = desired_matrix[ii][jj]
+						if desiredNumber == next_matrix_value:
+							heuristic_value += math.sqrt(abs(i - ii) * abs(i - ii) + abs(j - jj) * abs(j - jj))
+	return heuristic_value
+
+def misplaced_heuristic(next_matrix, desired_matrix, length): # OPTI THIS
+	heuristic_value = 0
+	for i in range(length):
+		for j in range(length):
+			next_matrix_value = next_matrix[i][j]
+			if next_matrix[i][j] != desired_matrix[i][j]:
+				heuristic_value += 1
 	return heuristic_value
 
 def neighbors(current_matrix, length): # OPTI THIS
@@ -58,17 +80,20 @@ def resolve_npuzzle(start_matrix, desired_matrix, start_time, length, heuristic_
 				new_cost = cost_so_far[current_id] + 1
 
 				if heuristic_type == 'euclidean':
-					print('eucl')
-				elif heuristic_type == 'out-of-place':
-					print('oop')
+					next_matrix_heuristic = euclidean_heuristic(next_matrix, desired_matrix, length)
+				elif heuristic_type == 'misplaced':
+					next_matrix_heuristic = misplaced_heuristic(next_matrix, desired_matrix, length)
 				else:
 					next_matrix_heuristic = manhattan_heuristic(next_matrix, desired_matrix, length)
+
 				if next_id not in cost_so_far or new_cost < cost_so_far[next_id]:
 					cost_so_far[next_id] = new_cost
 					new_cost_with_heuristic = new_cost + next_matrix_heuristic
 					matrix_queue.put(next_matrix, -new_cost_with_heuristic)
 					came_from[next_id] = current_matrix
 					current_state_count += 1
+
 					if maximum_state_count < current_state_count:
 						maximum_state_count = current_state_count
+
 	print('This npuzzle is ' + Bcolors.RED + 'unsolvable !' + Bcolors.ENDC)

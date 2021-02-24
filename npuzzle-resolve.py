@@ -17,7 +17,7 @@ if __name__ == '__main__':
 	parser.add_argument('-f', '--file', type=open, help='File containing the puzzle to solve.')
 	parser.add_argument('-g', '--generate', type=int, help='Generate matrix of choosen length.')
 	parser.add_argument('-u', '--unsolvable', action="store_true", default=False, help='Used with -g: Make the generated matrix unsolvable')
-	parser.add_argument('-he', '--heuristic', type=str, default='manhattan', help='Choose heuristic function between: manhattan | euclidean | out-of-place')
+	parser.add_argument('-he', '--heuristic', type=str, default='manhattan', help='Choose heuristic function between: manhattan | euclidean | misplaced')
 
 	try:
 		args = parser.parse_args()
@@ -59,8 +59,8 @@ if __name__ == '__main__':
 	heuristic_type = 'manhattan'
 	if args.heuristic == 'euclidean':
 		heuristic_type = 'euclidean'
-	elif args.heuristic == 'out-of-place':
-		heuristic_type = 'out-of-place'
+	elif args.heuristic == 'misplaced':
+		heuristic_type = 'misplaced'
 
 	print(Bcolors.YELLOW + '\n===== resolving n-puzzle with '
 		+ Bcolors.GREEN + heuristic_type + Bcolors.YELLOW + ' heuristic function =====' + Bcolors.ENDC)
