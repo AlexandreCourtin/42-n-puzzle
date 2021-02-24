@@ -72,3 +72,4 @@ def print_path_from(finalMatrix, came_from, desired_matrix):
 		print_matrix(t)
 		print(Bcolors.YELLOW + '================' + Bcolors.ENDC)
 	print_matrix(desired_matrix)
+	print('number of moves: ' + Bcolors.GREEN + str(len(tab))+ Bcolors.ENDC)
