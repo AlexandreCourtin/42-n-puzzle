@@ -7,6 +7,8 @@ sys.path.append('./utils')
 
 from file_reader import *
 from generator import *
+from verificator import *
+from resolver import *
 
 switcher_direction = {
 	0: [1, 0],
@@ -59,20 +61,7 @@ if __name__ == '__main__':
 		print(Bcolors.GREEN + str(array) + Bcolors.ENDC)
 
 	print(Bcolors.YELLOW + '\n===== check if only one zero in matrix =====' + Bcolors.ENDC)
-	zero_number = 0
-	for array in start_matrix:
-		for number in array:
-			if number == 0:
-				zero_number += 1
-
-	if zero_number > 1:
-		print(Bcolors.RED + 'too much zeros' + Bcolors.ENDC)
-		sys.exit(1)
-	elif zero_number < 1:
-		print(Bcolors.RED + 'no zeros' + Bcolors.ENDC)
-		sys.exit(1)
-	else:
-		print(Bcolors.GREEN + 'all good' + Bcolors.ENDC)
+	check_zeros_in_matrix(start_matrix)
 
 	print(Bcolors.YELLOW + '\n===== making desired matrix =====' + Bcolors.ENDC)
 	desired_matrix = make_desired_matrix(length)
@@ -83,27 +72,6 @@ if __name__ == '__main__':
 
 	print(Bcolors.YELLOW + '\n===== resolving n-puzzle with '
 		+ Bcolors.GREEN + 'manhattan-distance' + Bcolors.YELLOW + ' heuristic function =====' + Bcolors.ENDC)
-
-	def heuristic(next_matrix): # OPTI THIS
-		heuristic_value = 0
-		for i in range(length):
-			for j in range(length):
-				next_matrix_value = next_matrix[i][j]
-				if next_matrix_value != 0:
-					for ii in range(length):
-						for jj in range(length):
-							desiredNumber = desired_matrix[ii][jj]
-							if desiredNumber == next_matrix_value:
-								heuristic_value += abs(i - ii) + abs(j - jj)
-
-		return heuristic_value
-
-	def neighbors(current_matrix): # OPTI THIS
-		neighbors_list = [[], [], [], []]
-		for d in range(4):
-			current_direction = switcher_direction.get(d)
-			neighbors_list[d] = change_tile(current_matrix, length, current_direction[1], current_direction[0])
-		return neighbors_list
 
 	matrix_queue = queue.Queue()
 	matrix_queue.put(start_matrix, 0)
@@ -131,12 +99,12 @@ if __name__ == '__main__':
 			print('maximum state count in memory = ' + Bcolors.GREEN + str(maximum_state_count) + Bcolors.ENDC)
 			break
 
-		for next_matrix in neighbors(current_matrix):
+		for next_matrix in neighbors(current_matrix, length):
 			if next_matrix != None:
 				current_id = matrix_to_id(current_matrix)
 				next_id = matrix_to_id(next_matrix)
 				new_cost = cost_so_far[current_id] + 1
-				next_matrix_heuristic = heuristic(next_matrix)
+				next_matrix_heuristic = heuristic(next_matrix, desired_matrix, length)
 				if next_id not in cost_so_far or new_cost < cost_so_far[next_id]:
 					cost_so_far[next_id] = new_cost
 					new_cost_with_heuristic = new_cost + next_matrix_heuristic
