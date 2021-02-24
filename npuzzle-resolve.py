@@ -19,7 +19,11 @@ if __name__ == '__main__':
 	parser.add_argument('-u', '--unsolvable', action="store_true", default=False, help='Used with -g: Make the generated matrix unsolvable')
 	# parser.add_argument('-f', '--function', type=str, default='manhattan-distance', help='Choose heuristic function between: manhattan-distance')
 
-	args = parser.parse_args()
+	try:
+		args = parser.parse_args()
+	except:
+		print('file not found')
+		sys.exit(1)
 
 	length = 0
 	start_matrix = []
