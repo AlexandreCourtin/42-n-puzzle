@@ -41,8 +41,8 @@ if __name__ == '__main__':
 	for array in start_matrix:
 		print(Bcolors.GREEN + str(array) + Bcolors.ENDC)
 
-	print(Bcolors.YELLOW + '\n===== check if only one zero in matrix =====' + Bcolors.ENDC)
-	check_zeros_in_matrix(start_matrix)
+	print(Bcolors.YELLOW + '\n===== check if matrix is compatible =====' + Bcolors.ENDC)
+	check_matrix(start_matrix, length)
 
 	print(Bcolors.YELLOW + '\n===== making desired matrix =====' + Bcolors.ENDC)
 	desired_matrix = make_desired_matrix(length)
