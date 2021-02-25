@@ -22,9 +22,12 @@ def manhattan_linear_heuristic(next_matrix, desired_matrix, length): # OPTI THIS
 	linear_conflicts = 0
 	heuristic_value = manhattan_heuristic(next_matrix, desired_matrix, length)
 
+	def check_row(current_row, desired_row, length):
+		result = 0
+		return result
+
 	for i in range(length):
-		for j in range(length):
-	heuristic_value += 2 * linear_conflicts
+		heuristic_value += check_row(next_matrix[i], desired_matrix[i], length)
 	return heuristic_value
 
 def hamming_heuristic(next_matrix, desired_matrix, length): # OPTI THIS
