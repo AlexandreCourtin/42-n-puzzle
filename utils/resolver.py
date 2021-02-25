@@ -22,12 +22,23 @@ def manhattan_linear_heuristic(next_matrix, desired_matrix, length): # OPTI THIS
 	linear_conflicts = 0
 	heuristic_value = manhattan_heuristic(next_matrix, desired_matrix, length)
 
+	def invert_matrix(matrix, length):
+		inverted_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
+		for i in range(length):
+			for j in range(length):
+				invert_matrix[i][j] = matrix[j][i]
+		return invert_matrix
+
 	def check_row(current_row, desired_row, length):
 		result = 0
 		return result
 
+	invert_current = invert_matrix(next_matrix, length)
+	invert_desired = invert_matrix(desired_matrix, length)
+
 	for i in range(length):
 		heuristic_value += check_row(next_matrix[i], desired_matrix[i], length)
+		heuristic_value += check_row(invert_current[i], invert_desired[i], length)
 	return heuristic_value
 
 def hamming_heuristic(next_matrix, desired_matrix, length): # OPTI THIS
