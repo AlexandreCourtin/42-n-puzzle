@@ -19,18 +19,31 @@ def manhattan_heuristic(next_matrix, desired_matrix, length): # OPTI THIS
 	return heuristic_value
 
 def manhattan_linear_heuristic(next_matrix, desired_matrix, length): # OPTI THIS
-	linear_conflicts = 0
 	heuristic_value = manhattan_heuristic(next_matrix, desired_matrix, length)
 
 	def invert_matrix(matrix, length):
 		inverted_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
 		for i in range(length):
 			for j in range(length):
-				invert_matrix[i][j] = matrix[j][i]
-		return invert_matrix
+				inverted_matrix[i][j] = matrix[j][i]
+		return inverted_matrix
 
 	def check_row(current_row, desired_row, length):
 		result = 0
+
+		for i in range(length):
+			current_number = current_row[i]
+			for j in range(length):
+				desired_number = desired_row[j]
+				if current_number != 0 and current_number == desired_number:
+					for ii in reversed(range(length)):
+						current_second = current_row[ii]
+						if current_second != current_number and current_second != 0:
+							for jj in reversed(range(length)):
+								desired_second = desired_row[jj]
+								if current_second == desired_second:
+									if i < j and ii > jj:
+										result += 2
 		return result
 
 	invert_current = invert_matrix(next_matrix, length)
