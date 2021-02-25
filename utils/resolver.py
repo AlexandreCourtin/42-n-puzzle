@@ -67,10 +67,39 @@ def hamming_heuristic(next_matrix, desired_matrix, length): # OPTI THIS
 	return heuristic_value
 
 def neighbors(current_matrix, cost_so_far, length): # OPTI THIS
-	neighbors_list = [[], [], [], []]
-	for d in range(4):
-		current_direction = switcher_direction.get(d)
-		neighbors_list[d] = change_tile(current_matrix, length, current_direction[1], current_direction[0], cost_so_far)
+	neighbors_list = [ [ [ -1 for i in range(length) ] for j in range(length) ] for x in range(4) ]
+
+	changedTile = False
+	savedX = [-1, -1, -1, -1]
+	savedY = [-1, -1, -1, -1]
+	for i in range(length):
+		for j in range(length):
+			if current_matrix[i][j] == 0 and not changedTile:
+				for x in range(4):
+					current_direction = switcher_direction.get(x)
+					if current_direction[0] != 0 and j + current_direction[0] < length and j + current_direction[0] >= 0:
+						neighbors_list[x][i][j] = current_matrix[i][j + current_direction[0]]
+						neighbors_list[x][i][j + current_direction[0]] = 0
+						savedX[x] = j + current_direction[0]
+						savedY[x] = i
+					elif current_direction[1] != 0 and i + current_direction[1] < length and i + current_direction[1] >= 0:
+						neighbors_list[x][i][j] = current_matrix[i + current_direction[1]][j]
+						neighbors_list[x][i + current_direction[1]][j] = 0
+						savedX[x] = j
+						savedY[x] = i + current_direction[1]
+					else:
+						neighbors_list[x] = None
+				changedTile = True
+			else:
+				for x in range(4):
+					if neighbors_list[x]:
+						current_direction = switcher_direction.get(x)
+						if i != savedY[x] or j != savedX[x]:
+							neighbors_list[x][i][j] = current_matrix[i][j]
+
+	for x in range(4):
+		if neighbors_list[x] and cost_so_far and matrix_to_id(neighbors_list[x]) in cost_so_far:
+			neighbors_list[x] = None
 	return neighbors_list
 
 def resolve_npuzzle(start_matrix, desired_matrix, start_time, length, heuristic_type): # OPTI THIS
