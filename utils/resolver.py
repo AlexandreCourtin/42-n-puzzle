@@ -18,20 +18,16 @@ def manhattan_heuristic(next_matrix, desired_matrix, length): # OPTI THIS
 							heuristic_value += abs(i - ii) + abs(j - jj)
 	return heuristic_value
 
-def euclidean_heuristic(next_matrix, desired_matrix, length): # OPTI THIS
-	heuristic_value = 0
+def manhattan_linear_heuristic(next_matrix, desired_matrix, length): # OPTI THIS
+	linear_conflicts = 0
+	heuristic_value = manhattan_heuristic(next_matrix, desired_matrix, length)
+
 	for i in range(length):
 		for j in range(length):
-			next_matrix_value = next_matrix[i][j]
-			if next_matrix_value != 0:
-				for ii in range(length):
-					for jj in range(length):
-						desiredNumber = desired_matrix[ii][jj]
-						if desiredNumber == next_matrix_value:
-							heuristic_value += math.sqrt(abs(i - ii) * abs(i - ii) + abs(j - jj) * abs(j - jj))
+	heuristic_value += 2 * linear_conflicts
 	return heuristic_value
 
-def misplaced_heuristic(next_matrix, desired_matrix, length): # OPTI THIS
+def hamming_heuristic(next_matrix, desired_matrix, length): # OPTI THIS
 	heuristic_value = 0
 	for i in range(length):
 		for j in range(length):
@@ -79,10 +75,10 @@ def resolve_npuzzle(start_matrix, desired_matrix, start_time, length, heuristic_
 				next_id = matrix_to_id(next_matrix)
 				new_cost = cost_so_far[current_id] + 1
 
-				if heuristic_type == 'euclidean':
-					next_matrix_heuristic = euclidean_heuristic(next_matrix, desired_matrix, length)
-				elif heuristic_type == 'misplaced':
-					next_matrix_heuristic = misplaced_heuristic(next_matrix, desired_matrix, length)
+				if heuristic_type == 'manhattan_linear':
+					next_matrix_heuristic = manhattan_linear_heuristic(next_matrix, desired_matrix, length)
+				elif heuristic_type == 'hamming':
+					next_matrix_heuristic = hamming_heuristic(next_matrix, desired_matrix, length)
 				else:
 					next_matrix_heuristic = manhattan_heuristic(next_matrix, desired_matrix, length)
 
