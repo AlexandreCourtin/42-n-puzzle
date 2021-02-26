@@ -1,5 +1,4 @@
 import sys
-import queue
 import time
 import math
 
@@ -101,9 +100,12 @@ def neighbors(current_matrix, cost_so_far, length): # OPTI THIS
 			neighbors_list[x] = None
 	return neighbors_list
 
+def get_heuristic_score(elem):
+	return elem[1]
+
 def resolve_npuzzle(start_matrix, desired_matrix, start_time, length, heuristic_type): # OPTI THIS
-	matrix_queue = queue.Queue()
-	matrix_queue.put(start_matrix, 0)
+	matrix_queue = []
+	matrix_queue.append([start_matrix, 0])
 
 	selected_opened_state_count = 0
 	maximum_state_count = 1
@@ -114,8 +116,11 @@ def resolve_npuzzle(start_matrix, desired_matrix, start_time, length, heuristic_
 	came_from[matrix_to_id(start_matrix)] = None
 	cost_so_far[matrix_to_id(start_matrix)] = 0
 
-	while not matrix_queue.empty():
-		current_matrix = matrix_queue.get()
+	while matrix_queue:
+		current_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
+		for i in range(length):
+			current_matrix[i] = matrix_queue[0][0][i].copy()
+		matrix_queue.pop(0)
 		selected_opened_state_count += 1
 		current_state_count -= 1
 
@@ -142,7 +147,8 @@ def resolve_npuzzle(start_matrix, desired_matrix, start_time, length, heuristic_
 
 				cost_so_far[next_id] = new_cost
 				new_cost_with_heuristic = new_cost + next_matrix_heuristic
-				matrix_queue.put(next_matrix, -new_cost_with_heuristic)
+				matrix_queue.append([next_matrix, new_cost_with_heuristic])
+				matrix_queue.sort(key=get_heuristic_score)
 				came_from[next_id] = current_matrix
 				current_state_count += 1
 
