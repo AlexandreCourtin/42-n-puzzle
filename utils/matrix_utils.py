@@ -14,7 +14,8 @@ def change_tile(current_matrix, length, paramX, paramY, cost_so_far): # OPTI THI
 	savedY = -1
 	for i in range(length):
 		for j in range(length):
-			if current_matrix[i][j] == 0 and not changedTile:
+			current_matrix_value = current_matrix[i][j]
+			if current_matrix_value == 0 and not changedTile:
 				if paramX != 0 and j + paramX < length and j + paramX >= 0:
 					result_matrix[i][j] = current_matrix[i][j + paramX]
 					result_matrix[i][j + paramX] = 0
@@ -30,7 +31,7 @@ def change_tile(current_matrix, length, paramX, paramY, cost_so_far): # OPTI THI
 				else:
 					return None
 			elif i != savedY or j != savedX:
-				result_matrix[i][j] = current_matrix[i][j]
+				result_matrix[i][j] = current_matrix_value
 
 	if cost_so_far and matrix_to_id(result_matrix) in cost_so_far:
 		return None

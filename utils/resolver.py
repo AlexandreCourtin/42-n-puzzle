@@ -10,7 +10,7 @@ def manhattan_heuristic(next_matrix, desired_matrix, length): # OPTI THIS
 	for i in range(length):
 		for j in range(length):
 			next_matrix_value = next_matrix[i][j]
-			if next_matrix_value != 0:
+			if next_matrix_value != 0 and next_matrix_value != desired_matrix[i][j]:
 				for ii in range(length):
 					for jj in range(length):
 						desiredNumber = desired_matrix[ii][jj]
@@ -61,7 +61,6 @@ def hamming_heuristic(next_matrix, desired_matrix, length): # OPTI THIS
 	heuristic_value = 0
 	for i in range(length):
 		for j in range(length):
-			next_matrix_value = next_matrix[i][j]
 			if next_matrix[i][j] != desired_matrix[i][j]:
 				heuristic_value += 1
 	return heuristic_value
