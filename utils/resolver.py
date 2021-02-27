@@ -64,7 +64,7 @@ def hamming_heuristic(next_matrix, desired_matrix, length): # OPTI THIS
 				heuristic_value += 1
 	return heuristic_value
 
-def neighbors(current_matrix, cost_so_far, length): # OPTI THIS
+def neighbors(current_matrix, length): # OPTI THIS
 	neighbors_list = [ [ [ -1 for i in range(length) ] for j in range(length) ] for x in range(4) ]
 
 	changedTile = False
@@ -95,9 +95,6 @@ def neighbors(current_matrix, cost_so_far, length): # OPTI THIS
 						if i != savedY[x] or j != savedX[x]:
 							neighbors_list[x][i][j] = current_matrix[i][j]
 
-	for x in range(4):
-		if neighbors_list[x] and cost_so_far and matrix_to_id(neighbors_list[x]) in cost_so_far:
-			neighbors_list[x] = None
 	return neighbors_list
 
 def get_heuristic_score(elem):
@@ -129,26 +126,28 @@ def resolve_npuzzle(start_matrix, desired_matrix, start_time, length, heuristic_
 			print('maximum state count in memory = ' + Bcolors.GREEN + str(maximum_state_count) + Bcolors.ENDC)
 			sys.exit(0)
 
-		for next_matrix in neighbors(current_matrix, cost_so_far, length):
+		for next_matrix in neighbors(current_matrix, length):
 			if next_matrix != None:
 				next_id = matrix_to_id(next_matrix)
-				new_cost = cost_so_far[current_id] + 1
 
-				if heuristic_type == 'manhattan_linear':
-					next_matrix_heuristic = manhattan_linear_heuristic(next_matrix, desired_matrix, length)
-				elif heuristic_type == 'hamming':
-					next_matrix_heuristic = hamming_heuristic(next_matrix, desired_matrix, length)
-				else:
-					next_matrix_heuristic = manhattan_heuristic(next_matrix, desired_matrix, length)
+				if next_id not in came_from:
+					new_cost = cost_so_far[current_id] + 1
 
-				cost_so_far[next_id] = new_cost
-				new_cost_with_heuristic = new_cost + next_matrix_heuristic
-				matrix_queue.append([next_matrix, new_cost_with_heuristic])
-				matrix_queue.sort(key=get_heuristic_score)
-				came_from[next_id] = current_matrix
-				current_state_count += 1
+					if heuristic_type == 'manhattan_linear':
+						next_matrix_heuristic = manhattan_linear_heuristic(next_matrix, desired_matrix, length)
+					elif heuristic_type == 'hamming':
+						next_matrix_heuristic = hamming_heuristic(next_matrix, desired_matrix, length)
+					else:
+						next_matrix_heuristic = manhattan_heuristic(next_matrix, desired_matrix, length)
 
-				if maximum_state_count < current_state_count:
-					maximum_state_count = current_state_count
+					cost_so_far[next_id] = new_cost
+					new_cost_with_heuristic = new_cost + next_matrix_heuristic
+					matrix_queue.append([next_matrix, new_cost_with_heuristic])
+					matrix_queue.sort(key=get_heuristic_score)
+					came_from[next_id] = current_matrix
+					current_state_count += 1
+
+					if maximum_state_count < current_state_count:
+						maximum_state_count = current_state_count
 
 	print('This npuzzle is ' + Bcolors.RED + 'unsolvable !' + Bcolors.ENDC)
