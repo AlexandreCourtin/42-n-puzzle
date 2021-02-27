@@ -33,18 +33,18 @@ def manhattan_linear_heuristic(next_matrix, desired_matrix, length): # OPTI THIS
 		checked_numbers = [ 0 for i in range(length) ]
 		for i in range(length):
 			current_number = current_row[i]
-			if current_number not in checked_numbers:
+			if current_number not in checked_numbers and current_number != 0:
 				checked_numbers[i] = current_number
 				for j in range(length):
 					desired_number = desired_row[j]
-					if current_number != 0 and current_number == desired_number:
+					if current_number == desired_number:
 						for ii in reversed(range(length)):
 							current_second = current_row[ii]
 							if current_second not in checked_numbers and current_second != 0:
 								for jj in reversed(range(length)):
 									desired_second = desired_row[jj]
 									if current_second == desired_second:
-										if i < j and ii > jj:
+										if i < ii and j > jj:
 											result += 2
 		return result
 

@@ -46,15 +46,15 @@ if __name__ == '__main__':
 	for array in start_matrix:
 		print(Bcolors.GREEN + str(array) + Bcolors.ENDC)
 
-	print(Bcolors.YELLOW + '\n===== check if matrix is compatible =====' + Bcolors.ENDC)
-	check_matrix(start_matrix, length)
-
 	print(Bcolors.YELLOW + '\n===== making desired matrix =====' + Bcolors.ENDC)
 	desired_matrix = make_desired_matrix(length)
 
 	print('desired matrix is:')
 	for array in desired_matrix:
 		print(Bcolors.GREEN + str(array) + Bcolors.ENDC)
+
+	print(Bcolors.YELLOW + '\n===== check if matrix is compatible =====' + Bcolors.ENDC)
+	check_matrix(start_matrix, desired_matrix, length)
 
 	heuristic_type = 'manhattan'
 	if args.heuristic == 'manhattan_linear':
