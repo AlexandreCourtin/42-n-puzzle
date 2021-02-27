@@ -109,12 +109,12 @@ def resolve_npuzzle(start_matrix, desired_matrix, start_time, length, heuristic_
 
 	came_from = dict()
 	cost_so_far = dict()
-	came_from[matrix_to_id(start_matrix)] = None
-	cost_so_far[matrix_to_id(start_matrix)] = 0
+	came_from[str(start_matrix)] = None
+	cost_so_far[str(start_matrix)] = 0
 
 	while len(matrix_queue) > 0:
 		current_matrix = matrix_queue.pop(0)[0]
-		current_id = matrix_to_id(current_matrix)
+		current_id = str(current_matrix)
 		selected_opened_state_count += 1
 		current_state_count -= 1
 
@@ -128,7 +128,7 @@ def resolve_npuzzle(start_matrix, desired_matrix, start_time, length, heuristic_
 
 		for next_matrix in neighbors(current_matrix, length):
 			if next_matrix != None:
-				next_id = matrix_to_id(next_matrix)
+				next_id = str(next_matrix)
 
 				if next_id not in came_from:
 					new_cost = cost_so_far[current_id] + 1

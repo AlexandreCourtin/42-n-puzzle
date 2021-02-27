@@ -6,7 +6,7 @@ def check_length(length):
 		print('size of matrix needs to be greater than 1')
 		sys.exit(1)
 
-def change_tile(current_matrix, length, paramX, paramY, cost_so_far): # OPTI THIS
+def change_tile(current_matrix, length, paramX, paramY): # OPTI THIS
 	result_matrix = [ [ -1 for i in range(length) ] for j in range(length) ]
 
 	changedTile = False
@@ -33,8 +33,6 @@ def change_tile(current_matrix, length, paramX, paramY, cost_so_far): # OPTI THI
 			elif i != savedY or j != savedX:
 				result_matrix[i][j] = current_matrix_value
 
-	if cost_so_far and matrix_to_id(result_matrix) in cost_so_far:
-		return None
 	return result_matrix
 
 def make_desired_matrix(length):
@@ -56,19 +54,12 @@ def print_matrix(m):
 	for row in m:
 		print(row)
 
-def matrix_to_id(matrix):
-	result = ''
-	for row in matrix:
-		for char in row:
-			result += str(char)
-	return result
-
 def print_path_from(finalMatrix, came_from, desired_matrix):
 	tab = []
-	previous_matrix = came_from[matrix_to_id(finalMatrix)]
+	previous_matrix = came_from[str(finalMatrix)]
 	while previous_matrix:
 		tab.append(previous_matrix)
-		previous_matrix = came_from[matrix_to_id(previous_matrix)]
+		previous_matrix = came_from[str(previous_matrix)]
 	for t in tab[::-1]:
 		print_matrix(t)
 		print(Bcolors.YELLOW + '================' + Bcolors.ENDC)
