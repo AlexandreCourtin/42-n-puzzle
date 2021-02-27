@@ -117,10 +117,7 @@ def resolve_npuzzle(start_matrix, desired_matrix, start_time, length, heuristic_
 	cost_so_far[matrix_to_id(start_matrix)] = 0
 
 	while matrix_queue:
-		current_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
-		for i in range(length):
-			current_matrix[i] = matrix_queue[0][0][i].copy()
-		matrix_queue.pop(0)
+		current_matrix = matrix_queue.pop(0)[0]
 		selected_opened_state_count += 1
 		current_state_count -= 1
 
