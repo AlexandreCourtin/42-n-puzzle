@@ -24,23 +24,7 @@ def check_matrix(matrix, desired_matrix, length):
 			matrix_in_row.append(matrix[i][j])
 			desired_in_row.append(desired_matrix[i][j])
 
-	inversions = 0
-	checked_numbers = [ 0 for i in range(length * length) ]
-	for i in range(length * length):
-		current_number = matrix_in_row[i]
-		if current_number not in checked_numbers and current_number != 0:
-			checked_numbers[i] = current_number
-			for j in range(length * length):
-				desired_number = desired_in_row[j]
-				if current_number == desired_number:
-					for ii in reversed(range(length * length)):
-						current_second = matrix_in_row[ii]
-						if current_second not in checked_numbers and current_second != 0:
-							for jj in reversed(range(length * length)):
-								desired_second = desired_in_row[jj]
-								if current_second == desired_second:
-									if i < ii and j > jj:
-										inversions += 1
+	inversions = check_row(matrix_in_row, desired_in_row, length * length) // 2
 
 	print(inversions)
 	print(matrix_in_row)
