@@ -26,12 +26,28 @@ def check_matrix(matrix, desired_matrix, length):
 
 	inversions = check_row(matrix_in_row, desired_in_row, length * length) // 2
 
-	print(inversions)
-	print(matrix_in_row)
-	print(desired_in_row)
+	is_valid = False
+	if length % 2 != 0:
+		if inversions % 2 == 0:
+			is_valid = True
+	else:
+		i = 0
+		zero_row = -1
+		while i < length and zero_row == -1:
+			j = 0
+			while j < length and zero_row == -1:
+				if matrix[i][j] == 0:
+					zero_row = i
+				j += 1
+			i += 1
 
-	if not (length % 2 != 0 and inversions % 2 == 0):
+		if inversions % 2 == 0 and (length - (zero_row + 1)) % 2 != 0:
+			is_valid = True
+		elif inversions % 2 != 0 and (length - (zero_row + 1)) % 2 == 0:
+			is_valid = True
+
+	if is_valid:
+		print(Bcolors.GREEN + 'matrix is well made !' + Bcolors.ENDC)
+	else:
 		print('This npuzzle is ' + Bcolors.RED + 'unsolvable !' + Bcolors.ENDC)
 		sys.exit(1)
-
-	print(Bcolors.GREEN + 'matrix is well made !' + Bcolors.ENDC)

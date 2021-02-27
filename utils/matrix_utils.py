@@ -1,9 +1,11 @@
+import sys
+
 from switchers import *
 from bcolors import *
 
 def check_length(length):
-	if length < 2:
-		print('size of matrix needs to be greater than 1')
+	if length < 3:
+		print('size of matrix needs to be greater than 2')
 		sys.exit(1)
 
 def change_tile(current_matrix, length, paramX, paramY): # OPTI THIS
