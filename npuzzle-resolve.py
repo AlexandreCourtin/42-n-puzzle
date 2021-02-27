@@ -7,7 +7,6 @@ sys.path.append('./utils')
 from file_reader import *
 from generator import *
 from verificator import *
-from resolver import *
 
 if __name__ == '__main__':
 	start_time = time.time()

@@ -2,25 +2,22 @@ import random
 
 from matrix_utils import *
 from bcolors import *
+from resolver import *
 
 def generate_matrix(length, unsolvable):
 	print(Bcolors.YELLOW + '===== generate random matrix =====' + Bcolors.ENDC)
 
 	check_length(length)
-
 	start_matrix = make_desired_matrix(length)
 
-	precedent_direction = -1
-	for i in range(length * length * length * length):
-		tmp = None
-		while not tmp:
-			random_direction = switcher_inverse.get(precedent_direction)
-			while random_direction == switcher_inverse.get(precedent_direction):
-				random_direction = random.randint(0, 3)
-			direction = switcher_direction.get(random_direction)
-			precedent_direction = random_direction
-			tmp = change_tile(start_matrix, length, direction[0], direction[1])
-		start_matrix = change_tile(start_matrix, length, direction[0], direction[1])
+	for i in range(10000):
+		tmp = neighbors(start_matrix, length)
+		random_tmp = None
+		while not random_tmp:
+			random_tmp = tmp[random.randint(0, 3)]
+
+		for j in range(length):
+			start_matrix[j] = random_tmp[j].copy()
 	print(Bcolors.GREEN + 'generated !' + Bcolors.ENDC)
 
 	if unsolvable:
