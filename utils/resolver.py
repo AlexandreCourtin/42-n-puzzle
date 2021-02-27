@@ -104,8 +104,7 @@ def get_heuristic_score(elem):
 	return elem[1]
 
 def resolve_npuzzle(start_matrix, desired_matrix, start_time, length, heuristic_type): # OPTI THIS
-	matrix_queue = []
-	matrix_queue.append([start_matrix, 0])
+	matrix_queue = [[start_matrix, 0]]
 
 	selected_opened_state_count = 0
 	maximum_state_count = 1
@@ -116,7 +115,7 @@ def resolve_npuzzle(start_matrix, desired_matrix, start_time, length, heuristic_
 	came_from[matrix_to_id(start_matrix)] = None
 	cost_so_far[matrix_to_id(start_matrix)] = 0
 
-	while matrix_queue:
+	while len(matrix_queue) > 0:
 		current_matrix = matrix_queue.pop(0)[0]
 		selected_opened_state_count += 1
 		current_state_count -= 1
