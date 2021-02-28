@@ -27,7 +27,7 @@ def check_matrix(matrix, desired_matrix, length):
 	def convert_desired(desired_in_row, length):
 		result = [ -1 for i in range(length * length) ]
 		for i in range(length * length):
-			result[i] = i
+			result[i] = i + 1
 		return result
 
 	def convert_row(matrix_in_row, desired_in_row, length):
