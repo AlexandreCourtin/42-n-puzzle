@@ -110,12 +110,6 @@ def resolve_npuzzle(start_matrix, desired_matrix, start_time, length, heuristic_
 				next_id = str(next_matrix)
 				new_cost = cost_so_far[current_id] + 1
 
-				# if next_id in cost_so_far and new_cost < cost_so_far[next_id]:
-				# 	for matrix in matrix_queue:
-				# 		if matrix[0] == next_matrix:
-				# 			matrix_queue.remove(matrix)
-				# 			break
-
 				if next_id not in cost_so_far or new_cost < cost_so_far[next_id]:
 					cost_so_far[next_id] = new_cost
 					came_from[next_id] = current_matrix
