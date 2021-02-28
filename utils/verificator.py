@@ -24,7 +24,38 @@ def check_matrix(matrix, desired_matrix, length):
 			matrix_in_row.append(matrix[i][j])
 			desired_in_row.append(desired_matrix[i][j])
 
-	inversions = check_row(matrix_in_row, desired_in_row, length * length) // 2
+	def convert_desired(desired_in_row, length):
+		result = [ -1 for i in range(length * length) ]
+		for i in range(length * length):
+			result[i] = i
+		return result
+
+	def convert_row(matrix_in_row, desired_in_row, length):
+		result = [ -1 for i in range(length * length) ]
+		converted = convert_desired(desired_in_row, length)
+		for i in range(length * length):
+			for j in range(length * length):
+				if matrix_in_row[i] == desired_in_row[j]:
+					result[i] = converted[j]
+		return result
+
+	print('matrix_in_row')
+	print(matrix_in_row)
+	print('desired_in_row')
+	print(desired_in_row)
+	print('convert_desired(length)')
+	print(convert_desired(desired_in_row, length))
+	print('convert_row(matrix_in_row, desired_in_row, length)')
+	print(convert_row(matrix_in_row, desired_in_row, length))
+
+	converted = convert_row(matrix_in_row, desired_in_row, length)
+	inversions = 0
+	for i, tile in enumerate(converted):
+		for _, after in enumerate(converted[i + 1:]):
+			if tile > after and tile != 0 and after != 0:
+				inversions += 1
+
+	print('inversions: ' + str(inversions))
 
 	is_valid = False
 	if length % 2 != 0:
