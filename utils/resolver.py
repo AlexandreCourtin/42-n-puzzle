@@ -128,7 +128,11 @@ def resolve_npuzzle(start_matrix, desired_matrix, start_time, length, heuristic_
 					else:
 						next_matrix_heuristic = manhattan_heuristic(next_matrix, desired_matrix, length)
 
-					new_cost_with_heuristic = new_cost + next_matrix_heuristic
+					if length > 3:
+						new_cost_with_heuristic = new_cost + next_matrix_heuristic * length
+					else:
+						new_cost_with_heuristic = new_cost + next_matrix_heuristic
+
 					matrix_queue.append([next_matrix, new_cost_with_heuristic])
 					matrix_queue.sort(key=get_heuristic_score)
 
