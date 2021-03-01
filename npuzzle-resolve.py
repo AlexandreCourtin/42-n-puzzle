@@ -1,3 +1,7 @@
+# EMPTY FILE NOT WORKING
+# EMPTY COMMENTS NOT WORKING
+# SPITTED FILE NOT WORKING
+
 import sys
 import argparse
 import time
