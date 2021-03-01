@@ -1,11 +1,10 @@
 import random
 
 from matrix_utils import *
-from bcolors import *
 from resolver import *
 
-def generate_matrix(length, unsolvable):
-	print(Bcolors.YELLOW + '===== generate random matrix =====' + Bcolors.ENDC)
+def generate_matrix(length, unsolvable, bcolors):
+	print(bcolors.yellow + '===== generate random matrix =====' + bcolors.endc)
 
 	check_length(length)
 	start_matrix = make_desired_matrix(length)
@@ -18,14 +17,14 @@ def generate_matrix(length, unsolvable):
 
 		for j in range(length):
 			start_matrix[j] = random_tmp[j].copy()
-	print(Bcolors.GREEN + 'generated !' + Bcolors.ENDC)
+	print(bcolors.green + 'generated !' + bcolors.endc)
 
 	if unsolvable:
 		if start_matrix[0][0] == 0 or start_matrix[0][1] == 0:
 			start_matrix[length - 1][length - 1], start_matrix[length - 1][length - 2] = start_matrix[length - 1][length - 2], start_matrix[length - 1][length - 1]
 		else:
 			start_matrix[0][0], start_matrix[0][1] = start_matrix[0][1], start_matrix[0][0]
-		print(Bcolors.RED + 'unsolvable !' + Bcolors.ENDC)
+		print(bcolors.red + 'unsolvable !' + bcolors.endc)
 	else:
-		print(Bcolors.GREEN + 'solvable !' + Bcolors.ENDC)
+		print(bcolors.green + 'solvable !' + bcolors.endc)
 	return start_matrix

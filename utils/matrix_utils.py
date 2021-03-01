@@ -1,14 +1,13 @@
 import sys
 
 from switchers import *
-from bcolors import *
 
 def check_length(length):
 	if length < 3:
 		print('size of matrix needs to be greater than 2')
 		sys.exit(1)
 
-def change_tile(current_matrix, length, paramX, paramY): # OPTI THIS
+def change_tile(current_matrix, length, paramX, paramY):
 	result_matrix = [ [ -1 for i in range(length) ] for j in range(length) ]
 
 	changedTile = False
@@ -56,7 +55,7 @@ def print_matrix(m):
 	for row in m:
 		print(row)
 
-def print_path_from(finalMatrix, came_from, desired_matrix):
+def print_path_from(finalMatrix, came_from, desired_matrix, bcolors):
 	tab = []
 	previous_matrix = came_from[str(finalMatrix)]
 	while previous_matrix:
@@ -64,9 +63,9 @@ def print_path_from(finalMatrix, came_from, desired_matrix):
 		previous_matrix = came_from[str(previous_matrix)]
 	for t in tab[::-1]:
 		print_matrix(t)
-		print(Bcolors.YELLOW + '================' + Bcolors.ENDC)
+		print(bcolors.yellow + '================' + bcolors.endc)
 	print_matrix(desired_matrix)
-	print('number of moves = ' + Bcolors.GREEN + str(len(tab))+ Bcolors.ENDC)
+	print('number of moves = ' + bcolors.green + str(len(tab))+ bcolors.endc)
 
 def check_row(current_row, desired_row, length):
 	result = 0

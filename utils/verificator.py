@@ -3,19 +3,19 @@ import math
 
 from matrix_utils import *
 
-def check_matrix(matrix, desired_matrix, length):
+def check_matrix(matrix, desired_matrix, length, bcolors):
 	for i in range(length * length):
 		its_okay = False
 		for row in matrix:
 			for char in row:
 				if int(char) == i:
 					if its_okay:
-						print(Bcolors.RED + 'Too many ' + str(i) + ' in matrix' + Bcolors.ENDC)
+						print(bcolors.red + 'Too many ' + str(i) + ' in matrix' + bcolors.endc)
 						sys.exit(1)
 					its_okay = True
 
 		if not its_okay:
-			print(Bcolors.RED + 'There\'s no ' + str(i) + ' in matrix' + Bcolors.ENDC)
+			print(bcolors.red + 'There\'s no ' + str(i) + ' in matrix' + bcolors.endc)
 			sys.exit(1)
 
 	def find_zero():
@@ -52,7 +52,7 @@ def check_matrix(matrix, desired_matrix, length):
 	is_valid = find_zero() % 2 == find_inversions() % 2
 
 	if is_valid:
-		print(Bcolors.GREEN + 'matrix is well made !' + Bcolors.ENDC)
+		print(bcolors.green + 'matrix is well made !' + bcolors.endc)
 	else:
-		print('This npuzzle is ' + Bcolors.RED + 'unsolvable !' + Bcolors.ENDC)
+		print('This npuzzle is ' + bcolors.red + 'unsolvable !' + bcolors.endc)
 		sys.exit(1)

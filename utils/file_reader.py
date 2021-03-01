@@ -1,9 +1,6 @@
 from matrix_utils import *
-from bcolors import *
 
 def read_file_matrix(file):
-	print(Bcolors.YELLOW + '===== reading file =====' + Bcolors.ENDC)
-
 	has_length = False
 	line_count = 0
 	row = 0

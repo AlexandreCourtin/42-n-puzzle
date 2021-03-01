@@ -4,7 +4,7 @@ import math
 
 from matrix_utils import *
 
-def manhattan_heuristic(next_matrix, desired_matrix, length): # OPTI THIS
+def manhattan_heuristic(next_matrix, desired_matrix, length):
 	heuristic_value = 0
 	for i in range(length):
 		for j in range(length):
@@ -17,7 +17,7 @@ def manhattan_heuristic(next_matrix, desired_matrix, length): # OPTI THIS
 							heuristic_value += abs(i - ii) + abs(j - jj)
 	return heuristic_value
 
-def manhattan_linear_heuristic(next_matrix, desired_matrix, length): # OPTI THIS
+def manhattan_linear_heuristic(next_matrix, desired_matrix, length):
 	heuristic_value = manhattan_heuristic(next_matrix, desired_matrix, length)
 
 	def invert_matrix(matrix, length):
@@ -35,7 +35,7 @@ def manhattan_linear_heuristic(next_matrix, desired_matrix, length): # OPTI THIS
 		heuristic_value += check_row(invert_current[i], invert_desired[i], length)
 	return heuristic_value
 
-def hamming_heuristic(next_matrix, desired_matrix, length): # OPTI THIS
+def hamming_heuristic(next_matrix, desired_matrix, length):
 	heuristic_value = 0
 	for i in range(length):
 		for j in range(length):
@@ -43,7 +43,7 @@ def hamming_heuristic(next_matrix, desired_matrix, length): # OPTI THIS
 				heuristic_value += 1
 	return heuristic_value
 
-def neighbors(current_matrix, length): # OPTI THIS
+def neighbors(current_matrix, length):
 	neighbors_list = [ [ [ -1 for i in range(length) ] for j in range(length) ] for x in range(4) ]
 
 	changedTile = False
@@ -79,7 +79,7 @@ def neighbors(current_matrix, length): # OPTI THIS
 def get_heuristic_score(elem):
 	return elem[1]
 
-def resolve_npuzzle(start_matrix, desired_matrix, start_time, length, heuristic_type): # OPTI THIS
+def resolve_npuzzle(start_matrix, desired_matrix, start_time, length, heuristic_type, bcolors):
 	matrix_queue = [[start_matrix, 0]]
 
 	selected_opened_state_count = 0
@@ -98,11 +98,11 @@ def resolve_npuzzle(start_matrix, desired_matrix, start_time, length, heuristic_
 		current_state_count -= 1
 
 		if current_matrix == desired_matrix:
-			print(Bcolors.GREEN + 'win !' + Bcolors.ENDC)
-			print_path_from(current_matrix, came_from, desired_matrix)
-			print('time = ' + Bcolors.GREEN + str(time.time() - start_time) + Bcolors.ENDC)
-			print('selected opened state count = ' + Bcolors.GREEN + str(selected_opened_state_count) + Bcolors.ENDC)
-			print('maximum state count in memory = ' + Bcolors.GREEN + str(maximum_state_count) + Bcolors.ENDC)
+			print(bcolors.green + 'win !' + bcolors.endc)
+			print_path_from(current_matrix, came_from, desired_matrix, bcolors)
+			print('time = ' + bcolors.green + str(time.time() - start_time) + bcolors.endc)
+			print('selected opened state count = ' + bcolors.green + str(selected_opened_state_count) + bcolors.endc)
+			print('maximum state count in memory = ' + bcolors.green + str(maximum_state_count) + bcolors.endc)
 			sys.exit(0)
 
 		for next_matrix in neighbors(current_matrix, length):
@@ -133,4 +133,4 @@ def resolve_npuzzle(start_matrix, desired_matrix, start_time, length, heuristic_
 		if maximum_state_count < current_state_count:
 			maximum_state_count = current_state_count
 
-	print('This npuzzle is ' + Bcolors.RED + 'unsolvable !' + Bcolors.ENDC)
+	print('This npuzzle is ' + bcolors.red + 'unsolvable !' + bcolors.endc)
