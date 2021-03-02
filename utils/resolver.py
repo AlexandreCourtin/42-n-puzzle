@@ -82,7 +82,7 @@ def get_heuristic_score(elem):
 def resolve_npuzzle(start_matrix, desired_matrix, start_time, length, heuristic_type, bcolors):
 	matrix_queue = [[start_matrix, 0]]
 
-	selected_opened_state_count = 0
+	complexity = 0
 	maximum_state_count = 1
 	current_state_count = 1
 
@@ -94,15 +94,15 @@ def resolve_npuzzle(start_matrix, desired_matrix, start_time, length, heuristic_
 	while len(matrix_queue) > 0:
 		current_matrix = matrix_queue.pop(0)[0]
 		current_id = str(current_matrix)
-		selected_opened_state_count += 1
+		complexity += 1
 		current_state_count -= 1
 
 		if current_matrix == desired_matrix:
 			print(bcolors.green + 'win !' + bcolors.endc)
 			print_path_from(current_matrix, came_from, desired_matrix, bcolors)
 			print('time = ' + bcolors.green + str(time.time() - start_time) + bcolors.endc)
-			print('selected opened state count = ' + bcolors.green + str(selected_opened_state_count) + bcolors.endc)
-			print('maximum state count in memory = ' + bcolors.green + str(maximum_state_count) + bcolors.endc)
+			print('complexity in time = ' + bcolors.green + str(complexity) + bcolors.endc)
+			print('complexity in size = ' + bcolors.green + str(maximum_state_count) + bcolors.endc)
 			sys.exit(0)
 
 		for next_matrix in neighbors(current_matrix, length):
@@ -113,7 +113,6 @@ def resolve_npuzzle(start_matrix, desired_matrix, start_time, length, heuristic_
 				if next_id not in cost_so_far or new_cost < cost_so_far[next_id]:
 					cost_so_far[next_id] = new_cost
 					came_from[next_id] = current_matrix
-					current_state_count += 1
 
 					if heuristic_type == 'manhattan_linear':
 						next_matrix_heuristic = manhattan_linear_heuristic(next_matrix, desired_matrix, length)
@@ -122,13 +121,12 @@ def resolve_npuzzle(start_matrix, desired_matrix, start_time, length, heuristic_
 					else:
 						next_matrix_heuristic = manhattan_heuristic(next_matrix, desired_matrix, length)
 
-					if length > 3:
-						new_cost_with_heuristic = new_cost + next_matrix_heuristic * length
-					else:
-						new_cost_with_heuristic = new_cost + next_matrix_heuristic
+					new_cost_with_heuristic = new_cost + next_matrix_heuristic * length
 
 					matrix_queue.append([next_matrix, new_cost_with_heuristic])
 					matrix_queue.sort(key=get_heuristic_score)
+
+					current_state_count += 1
 
 		if maximum_state_count < current_state_count:
 			maximum_state_count = current_state_count
