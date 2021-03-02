@@ -1,5 +1,3 @@
-# EMPTY FILE NOT WORKING
-# EMPTY COMMENTS NOT WORKING
 # SPITTED FILE NOT WORKING
 
 import sys
@@ -42,7 +40,11 @@ if __name__ == '__main__':
 	if args.file:
 		print(bcolors.yellow + '===== reading file =====' + bcolors.endc)
 		start_matrix = read_file_matrix(args.file)
-		length = len(start_matrix[0])
+		if start_matrix:
+			length = len(start_matrix[0])
+		else:
+			print(bcolors.red + 'Error reading length in file' + bcolors.endc)
+			sys.exit(1)
 	elif args.generate:
 		length = args.generate
 		unsolvable = args.unsolvable
