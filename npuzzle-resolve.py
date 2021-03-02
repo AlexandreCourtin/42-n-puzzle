@@ -1,5 +1,3 @@
-# SPITTED FILE NOT WORKING
-
 import sys
 import argparse
 import time
@@ -39,7 +37,7 @@ if __name__ == '__main__':
 
 	if args.file:
 		print(bcolors.yellow + '===== reading file =====' + bcolors.endc)
-		start_matrix = read_file_matrix(args.file)
+		start_matrix = read_file_matrix(args.file, bcolors)
 		if start_matrix:
 			length = len(start_matrix[0])
 		else:
@@ -50,7 +48,7 @@ if __name__ == '__main__':
 		unsolvable = args.unsolvable
 		start_matrix = generate_matrix(length, unsolvable, bcolors)
 	else:
-		print('args error')
+		print(bcolors.red + 'args error' + bcolors.endc)
 		sys.exit(1)
 
 	desired_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]

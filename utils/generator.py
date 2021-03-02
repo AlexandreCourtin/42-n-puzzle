@@ -6,7 +6,7 @@ from resolver import *
 def generate_matrix(length, unsolvable, bcolors):
 	print(bcolors.yellow + '===== generate random matrix =====' + bcolors.endc)
 
-	check_length(length)
+	check_length(length, bcolors)
 	start_matrix = make_desired_matrix(length)
 
 	for i in range(10000):
