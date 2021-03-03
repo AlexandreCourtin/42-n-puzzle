@@ -2,8 +2,6 @@ import sys
 import argparse
 import time
 
-sys.path.append('./utils')
-
 from file_reader import *
 from generator import *
 from verificator import *
