@@ -25,14 +25,7 @@ def check_matrix(matrix, desired_matrix, length, bcolors):
 					xi = j
 					yi = i
 					break
-		if length % 2 != 0:
-			xf = math.ceil(length / 2)
-			yf = math.ceil(length / 2)
-		else:
-			xf = length / 2 - 1
-			yf = length / 2
-		d = math.fabs(xf - xi) + math.fabs(yf - yi)
-		return d
+		return [xi, yi]
 
 	def find_inversions():
 		matrix_in_row = []
@@ -49,7 +42,18 @@ def check_matrix(matrix, desired_matrix, length, bcolors):
 					inversions += 1
 		return inversions
 
-	is_valid = find_zero() % 2 == find_inversions() % 2
+	inversions = find_inversions()
+	zero_pos = find_zero()
+
+	if length % 2 != 0:
+		xf = math.ceil(length / 2)
+		yf = math.ceil(length / 2)
+	else:
+		xf = length / 2 - 1
+		yf = length / 2
+
+	counting_from_middle = math.fabs(xf - zero_pos[0]) + math.fabs(yf - zero_pos[1])
+	is_valid = counting_from_middle % 2 == inversions % 2
 
 	if is_valid:
 		print('This npuzzle is ' + bcolors.green + 'solvable !' + bcolors.endc)
