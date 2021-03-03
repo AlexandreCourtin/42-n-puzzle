@@ -3,8 +3,8 @@ import sys
 from switchers import *
 
 def check_length(length, bcolors):
-	if length < 3:
-		print(bcolors.red + 'Size of puzzle must be greater than 2' + bcolors.endc)
+	if length < 3 or length > 10:
+		print(bcolors.red + 'Size of puzzle must be between 3 and 10' + bcolors.endc)
 		sys.exit(1)
 
 def change_tile(current_matrix, length, paramX, paramY):
