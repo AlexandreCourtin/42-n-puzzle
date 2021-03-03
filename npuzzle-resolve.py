@@ -18,11 +18,7 @@ if __name__ == '__main__':
 	parser.add_argument('-nc', '--nocolors', action="store_true", default=False, help='Every print will be uncolored.')
 	parser.add_argument('-he', '--heuristic', type=str, default='manhattan', help='Choose heuristic function between: manhattan | manhattan_linear | hamming')
 
-	try:
-		args = parser.parse_args()
-	except:
-		print('args error')
-		sys.exit(1)
+	args = parser.parse_args()
 
 	bcolors = None
 	if args.nocolors:
