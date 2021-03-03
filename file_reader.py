@@ -13,10 +13,8 @@ def read_file_matrix(file, bcolors):
 	line = file.readline()
 	while line:
 		line = line.split()
-		print('line {}:'.format(line_count))
 
 		for i, char in enumerate(line):
-			print(char, end = '|')
 			if char[0] == '#':
 				break
 			if not line:
@@ -32,7 +30,6 @@ def read_file_matrix(file, bcolors):
 					print(bcolors.red + 'Length reading error' + bcolors.endc)
 					sys.exit(1)
 			else:
-				print('count: ' + str(count))
 				if count > length * length:
 					print(bcolors.red + 'Too many lines' + bcolors.endc)
 					sys.exit(1)
@@ -50,7 +47,8 @@ def read_file_matrix(file, bcolors):
 						row += 1
 			count += 1
 		line = file.readline()
-		print('')
 
 		line_count += 1
+
+	print(bcolors.green + 'File reader success' + bcolors.endc)
 	return start_matrix
