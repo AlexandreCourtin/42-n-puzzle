@@ -52,7 +52,7 @@ def check_matrix(matrix, desired_matrix, length, bcolors):
 	is_valid = find_zero() % 2 == find_inversions() % 2
 
 	if is_valid:
-		print(bcolors.green + 'matrix is well made !' + bcolors.endc)
+		print('This npuzzle is ' + bcolors.green + 'solvable !' + bcolors.endc)
 	else:
 		print('This npuzzle is ' + bcolors.red + 'unsolvable !' + bcolors.endc)
 		sys.exit(1)
