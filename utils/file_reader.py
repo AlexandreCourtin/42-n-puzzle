@@ -15,7 +15,7 @@ def read_file_matrix(file, bcolors):
 		line = line.split()
 		print('line {}:'.format(line_count))
 
-		for char in line:
+		for i, char in enumerate(line):
 			print(char, end = '|')
 			if char[0] == '#':
 				break
@@ -36,7 +36,7 @@ def read_file_matrix(file, bcolors):
 				if count > length * length:
 					print(bcolors.red + 'Too many lines' + bcolors.endc)
 					sys.exit(1)
-				if len(line) > length:
+				if i >= length:
 					print(bcolors.red + 'Line too long' + bcolors.endc)
 					sys.exit(1)
 				if not char.isnumeric():
