@@ -45,7 +45,7 @@ if __name__ == '__main__':
 		unsolvable = args.unsolvable
 		start_matrix = generate_matrix(length, unsolvable, bcolors)
 	else:
-		print(bcolors.red + 'args error' + bcolors.endc)
+		print(bcolors.red + 'args error, use -h --help for command list' + bcolors.endc)
 		sys.exit(1)
 
 	desired_matrix = [ [ 0 for i in range(length) ] for j in range(length) ]
