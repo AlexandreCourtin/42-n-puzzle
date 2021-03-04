@@ -84,7 +84,6 @@ def resolve_npuzzle(start_matrix, desired_matrix, start_time, length, heuristic_
 
 	complexity = 0
 	maximum_state_count = 1
-	current_state_count = 1
 
 	came_from = dict()
 	cost_so_far = dict()
@@ -95,7 +94,6 @@ def resolve_npuzzle(start_matrix, desired_matrix, start_time, length, heuristic_
 		current_matrix = matrix_queue.pop(0)[0]
 		current_id = str(current_matrix)
 		complexity += 1
-		current_state_count -= 1
 
 		if current_matrix == desired_matrix:
 			print(bcolors.green + 'win !' + bcolors.endc)
@@ -126,9 +124,6 @@ def resolve_npuzzle(start_matrix, desired_matrix, start_time, length, heuristic_
 					matrix_queue.append([next_matrix, new_cost_with_heuristic])
 					matrix_queue.sort(key=get_heuristic_score)
 
-					current_state_count += 1
-
-		if maximum_state_count < current_state_count:
-			maximum_state_count = current_state_count
+					maximum_state_count += 1
 
 	print('This npuzzle is ' + bcolors.red + 'unsolvable !' + bcolors.endc)
